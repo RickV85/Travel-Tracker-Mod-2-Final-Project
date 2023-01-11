@@ -23,7 +23,7 @@ class Traveler {
 	  let mm = String(today.getMonth() + 1).padStart(2, '0');
 	  let yyyy = today.getFullYear();
 	  today = `${yyyy}-${mm}-${dd}`;
-    let oneYearAgo = `${yyyy - 1}-${mm}-${dd}`
+    // let oneYearAgo = `${yyyy - 1}-${mm}-${dd}`
 
     let totalForPastTrips = this.pastTrips.reduce((total, trip) => {
       let tripYear = +(trip.date.slice(0, 4));

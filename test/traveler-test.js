@@ -1,9 +1,9 @@
 import chai from 'chai';
 const expect = chai.expect;
 import Traveler from '../src/traveler';
-import travelers from '../test/travelers-test-data'
-import trips from '../test/trips-test-data'
-import destinations from '../test/destinations-test-data'
+import travelers from '../test/travelers-test-data';
+import trips from '../test/trips-test-data';
+import destinations from '../test/destinations-test-data';
 
 
 describe('Traveler', function() {
@@ -15,7 +15,6 @@ describe('Traveler', function() {
     testTrips = trips;
     testDestinations = destinations;
     testTraveler = new Traveler(travelers[0]);
-    testTraveler.addPastTrips(testTrips);
   });
 
   it('should instantiate new travelers', function() {
@@ -35,10 +34,11 @@ describe('Traveler', function() {
   });
 
   it('should have a pastTrips property', function() {
-    expect(testTraveler).to.haveOwnProperty('pastTrips');
+    expect(testTraveler.pastTrips).to.deep.equal([]);
   });
 
   it('should have a method to add past trips to pastTrips property', function() {
+    testTraveler.addPastTrips(testTrips);
     expect(testTraveler.pastTrips).to.deep.equal(
       [
       {
@@ -56,15 +56,16 @@ describe('Traveler', function() {
   });
 
   it('should have properties for upcoming and pending trips', function() {
-    expect(testTraveler).to.haveOwnProperty('upcomingTrips');
-    expect(testTraveler).to.haveOwnProperty('pendingTrips');
+    expect(testTraveler.upcomingTrips).to.deep.equal([]);
+    expect(testTraveler.pendingTrips).to.deep.equal([]);
   })
 
   it('should have a property for total amount spent on trips in the last 365 days', function() {
-    expect(testTraveler).to.haveOwnProperty('amountSpentInLastYear');
+    expect(testTraveler.amountSpentInLastYear).to.equal(0);
   })
 
   it('should have a function to calculate amount spent in the last 365 days plus 10% fee', function() {
+    testTraveler.addPastTrips(testTrips);
     testTraveler.calculateSpendInLastYear();
     expect(testTraveler.amountSpentInLastYear).to.equal(0);
 
