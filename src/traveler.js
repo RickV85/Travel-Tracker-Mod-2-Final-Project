@@ -1,12 +1,17 @@
-import chai from 'chai';
-const expect = chai.expect;
-import travelers from '../test/travelers-test-data'
-import trips from '../test/trips-test-data'
-import destinations from '../test/destinations-test-data'
+class Traveler {
+  constructor(traveler) {
+    this.id = traveler.id;
+    this.name = traveler.name;
+    this.travelerType = traveler.travelerType;
+    this.pastTrips = [];
+    this.upcomingTrips = [];
+    this.pendingTrips = [];
+  }
 
+  addPastTrips(trips) {
+    let filteredTrips = trips.filter(trip => trip.userID === this.id);
+    this.pastTrips = filteredTrips;
+  }
+}
 
-describe('Travelers', function() {
-  it('should return true', function() {
-    expect(true).to.equal(true);
-  });
-});
+export default Traveler;
