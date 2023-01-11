@@ -15,4 +15,4 @@ const travelers = [
   travelerType: "shopper"
   }
 ]
-module.exports = trips;
+module.exports = travelers;
