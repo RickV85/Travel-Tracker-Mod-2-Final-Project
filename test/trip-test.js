@@ -34,12 +34,15 @@ describe('Trip', function() {
     expect(newTrip.duration).to.equal(14);
     expect(newTrip.status).to.equal('pending');
     expect(newTrip.suggestedActivities).to.deep.equal([]);
-    expect(newTrip.estimatedCost).to.equal(null);
+    expect(newTrip.estimatedCost).to.equal(5973);
   });
 
   it('should have a method for estimating cost for the trip', function() {
-    newTrip.calculateCost();
     expect(newTrip.estimatedCost).to.equal(5973)
+  });
+
+  it('should have a method to add a name property upon instantiation', function() {
+    expect(newTrip.destinationName).to.equal("Kathmandu, Nepal");
   })
 
 });

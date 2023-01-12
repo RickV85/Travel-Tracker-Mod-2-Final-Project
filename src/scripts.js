@@ -20,6 +20,7 @@ let allDestinations;
 // Event listeners
 window.addEventListener('load', () => {
   // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
+  // Will likely need to move this to a submit event listener and remove from here
   singleTravelerPromise = apicalls.getSingleTraveler(3);
 
   resolvePromises();
@@ -34,6 +35,7 @@ function resolvePromises() {
       allTrips = data[2].trips;
       allDestinations = data[3];
       instatiateCurrentTraveler();
+      updateDOM();
     })
 }
 
@@ -43,4 +45,16 @@ function instatiateCurrentTraveler() {
   currentTraveler.addPastTrips(allTrips);
   currentTraveler.calculateSpendInLastYear();
   console.log('currentTraveler', currentTraveler)
+}
+
+function updateDOM() {
+  userName.innerText = currentTraveler.name;
+  currentTraveler.pastTrips.forEach(trip => {
+    pastTripsDisplay.innerHTML += 
+    `<article class="trip-tile">
+      <p class="trip-tile-copy">
+        ${trip.date}<br>${trip.duration} nights in DESTINATION<br>with ${trip.travelers} guests<br>Total trip cost: $TRIPCOST
+      </p>
+    </article>`
+  })
 }
