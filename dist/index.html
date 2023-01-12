@@ -11,8 +11,8 @@
   <header class="header">
     <h1 class="site-title">Travel Tracker</h1>
     <div class="header-user-profile">
-      <p id="user-name">User Name</p>
-      <img src="https://img.icons8.com/external-gradak-royyan-wijaya/24/000000/B2FF9E/external-circle-gradak-user-gradak-royyan-wijaya.png"/>  
+      <p id="userName">User Name</p>
+      <img id="userIcon" src="https://img.icons8.com/external-gradak-royyan-wijaya/24/000000/B2FF9E/external-circle-gradak-user-gradak-royyan-wijaya.png"/>  
     </div>
   </header>
   <main class="main-display">
@@ -26,31 +26,49 @@
             <!-- Options to be injected here in fetch call for destinations -->
             <!-- <option value="name of destination">Destination name</option> -->
           </select>
-                    <!-- Create max date function to set today's date to min -->
+            <!-- Create max date function to set today's date to min -->
           <input type="date" id="tripDepartureDate" name="departure_date" min="" placeholder="Departure date">
           <input type="duration" id="tripDuration" name="duration" placeholder="How many nights?">
           <input type="number" id="tripNumTravelers" name="travelers" placeholder="# of travelers">
-          <button id="submitTripButton" class="submit-buttons">Let's go!</button>
+          <button class="submit-buttons" id="submitTripButton">Let's go!</button>
         </form>
       </section>
     </section>
-    <section class="trip-section">
+    <section class="trip-display">
       <section class="trip-sections" id="pastTripsSection">
         <h2 class="trip-headings" id="pastTripsHeading">Your Past Trips</h2>
         <!-- Inject past trips here, below is a proto-->
-        <article class="trip-tile">12/18/22<br>5 nights in Key West, Florids<br>with 7 guests<br>Total trip cost: $4378</article>
-        <article class="trip-tile">12/18/22<br>5 nights in Key West, Florids<br>with 7 guests<br>Total trip cost: $4378</article>
-        <article class="past-trip-total" id="pastTripTotalCost">Total trip cost: $749375</article>
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
+        <article class="past-trip-total">
+          <p id="pastTripTotalCost">Total trip cost: $749375</p>
+        </article>
       </section>
       <section class="trip-sections" id="pendingTripsSection">
-        <h2 class="trip-headings" id="pendingTripsHeading">Your Past Trips</h2>
+        <h2 class="trip-headings" id="pendingTripsHeading">Your Pending Trips</h2>
         <!-- Inject pending trips here, below is a proto-->
-        <article class="trip-tile">12/18/22<br>5 nights in Key West, Florids<br>with 7 guests<br>Total trip cost: $4378</article>
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
       </section>
       <section class="trip-sections" id="upcomingTripsSection">
         <h2 class="trip-headings" id="upcomingTripsHeading">Your Upcoming Trips</h2>
         <!-- Inject upcoming trips here, below is a proto-->
-        <article class="trip-tile">12/18/22<br>5 nights in Key West, Florids<br>with 7 guests<br>Total trip cost: $4378</article>
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
       </section>
     </section>
   </main>
