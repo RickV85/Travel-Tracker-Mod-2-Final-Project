@@ -31,14 +31,14 @@ h2 {
   font-size: 30px;
   font-weight: 700;
   color: #AFFC41;
-  margin-left: 20px;
+  margin-left: 4vw;
 }
 
 .header-user-profile {
   display: flex;
   flex-direction: row;
   color: #B2FF9E;
-  margin-right: 15px;
+  margin-right: 4vw;
 }
 
 #userName {
@@ -56,7 +56,7 @@ h2 {
 }
 
 .trip-request-section {
-  width: 90vw;
+  width: 92vw;
   background-color: #B0CDD3;
   outline-style: solid;
   outline-width: 1px;
