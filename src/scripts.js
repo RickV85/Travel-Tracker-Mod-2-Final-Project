@@ -1,11 +1,30 @@
-// This is the JavaScript entry file - your code begins here
-// Do not delete or rename this file ********
-
-// An example of how you tell webpack to use a CSS (SCSS) file
+// Imports
 import './css/styles.css';
+import apicalls from './apiCalls';
 
-// An example of how you tell webpack to use an image (also need to link to it in the index.html)
-import './images/turing-logo.png'
+// Promises
+let allTravelersPromise = apicalls.getAllTravelers();
+let singleTravelerPromise;
+let allTripsPromise = apicalls.getAllTrips();
+let allDestinationsPromise = apicalls.getAllDestinations();
+
+// Global variables
+let currentTraveler;
+
+// Query selectors
 
 
-console.log('This is the JavaScript entry file - your code begins here.');
+// Event listeners
+window.addEventListener('load', () => {
+  // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
+  singleTravelerPromise = apicalls.getSingleTraveler(4);
+  resolvePromises();
+})
+
+// Functions
+function resolvePromises() {
+  Promise.all([allTravelersPromise, singleTravelerPromise, allTripsPromise, allDestinationsPromise])
+    .then(data => {
+      console.log(data)
+    })
+}
