@@ -53,7 +53,7 @@ function updateDOM() {
     pastTripsDisplay.innerHTML += 
     `<article class="trip-tile">
       <p class="trip-tile-copy">
-        ${trip.date}<br>${trip.duration} nights in DESTINATION<br>with ${trip.travelers} guests<br>Total trip cost: $TRIPCOST
+        ${trip.date}<br>${trip.duration} nights in ${trip.destinationName}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
       </p>
     </article>`
   })

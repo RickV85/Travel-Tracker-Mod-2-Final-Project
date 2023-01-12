@@ -45,11 +45,20 @@ describe('Traveler', function() {
         id: 117,
         userID: 1,
         destinationID: 28,
+        destinationDetails: {
+          id: 28,
+          destination: "San Juan, Puerto Rico",
+          estimatedLodgingCostPerDay: 70,
+          estimatedFlightCostPerPerson: 900,
+          image: "https://images.unsplash.com/photo-1580237541049-2d715a09486e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2090&q=80",
+          alt: "white and brown concrete buildings near sea under white clouds during daytime"
+          },
         travelers: 3,
         date: "2021/01/09",
         duration: 15,
         status: "approved",
-        suggestedActivities: [ ]
+        suggestedActivities: [ ],
+        estimatedCost: 4125
         }
       ]
     );

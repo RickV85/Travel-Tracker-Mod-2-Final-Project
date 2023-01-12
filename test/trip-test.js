@@ -41,8 +41,17 @@ describe('Trip', function() {
     expect(newTrip.estimatedCost).to.equal(5973)
   });
 
-  it('should have a method to add a name property upon instantiation', function() {
-    expect(newTrip.destinationName).to.equal("Kathmandu, Nepal");
-  })
+  it('should have a method to add all destination details on instatiation', function() {
+    expect(newTrip.destinationDetails).to.deep.equal(
+      {
+      id: 32,
+      destination: "Kathmandu, Nepal",
+      estimatedLodgingCostPerDay: 45,
+      estimatedFlightCostPerPerson: 1200,
+      image: "https://images.unsplash.com/photo-1558799401-1dcba79834c2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80",
+      alt: "temple with buntings during daytime"
+      }
+    );
+  });
 
 });

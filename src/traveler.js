@@ -1,4 +1,5 @@
 import destinations from "../test/destinations-test-data";
+import Trip from "./trip"
 
 class Traveler {
   constructor(traveler) {
@@ -14,7 +15,8 @@ class Traveler {
   addPastTrips(trips) {
     let userTrips = trips.filter(trip => trip.userID === this.id);
     let approvedTrips = userTrips.filter(trip => trip.status === "approved");
-    this.pastTrips = approvedTrips;
+    let approvedPastTrips = approvedTrips.map(trip => new Trip(trip))
+    this.pastTrips = approvedPastTrips;
   }
 
   calculateSpendInLastYear() {

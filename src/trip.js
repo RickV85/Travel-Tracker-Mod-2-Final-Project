@@ -2,10 +2,10 @@ import destinations from "../test/destinations-test-data";
 
 class Trip {
   constructor(tripDetails) {
-    this.id = new Date().toString();
+    this.id = tripDetails.id || new Date().toString();
     this.userID = tripDetails.userID;
     this.destinationID = tripDetails.destinationID;
-    this.destinationName = this.addDestinationName(tripDetails.destinationID);
+    this.destinationDetails = this.addDestinationDetails(tripDetails.destinationID);
     this.travelers = tripDetails.travelers;
     this.date = tripDetails.date;
     this.duration = tripDetails.duration;
@@ -22,8 +22,8 @@ class Trip {
     return tripTotal;
   }
 
-  addDestinationName(destID) {
-    return destinations.find(dest => dest.id === destID).destination;
+  addDestinationDetails(destID) {
+    return destinations.find(dest => dest.id === destID);
   }
 };
 export default Trip;
