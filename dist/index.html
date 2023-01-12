@@ -4,13 +4,74 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webpack Starter Kit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Saira:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Travel Tracker by Rick Vermeil</title>
 </head>
 <body>
-  <img src="./images/turing-logo.png" alt="turing logo">
-  
-  <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+  <header class="header">
+    <h1 class="site-title">Travel Tracker</h1>
+    <div class="header-user-profile">
+      <p id="userName">User Name</p>
+      <img id="userIcon" src="https://img.icons8.com/external-gradak-royyan-wijaya/24/000000/B2FF9E/external-circle-gradak-user-gradak-royyan-wijaya.png"/>  
+    </div>
+  </header>
+  <main class="main-display">
+    <section class="trip-request-section">
+      <section class="trip-request-section-top">
+        <h2 id="tripRequestTitle">Let's book a trip!</h2>
+      </section>
+      <section class="trip-request-section-bottom">
+        <form class="trip-request-form" id="tripRequestForm">
+          <select id="destinationDropdown" name="destination" placeholder="Where to?">
+            <!-- Options to be injected here in fetch call for destinations -->
+            <!-- <option value="name of destination">Destination name</option> -->
+          </select>
+            <!-- Create max date function to set today's date to min -->
+          <input type="date" id="tripDepartureDate" name="departure_date" min="" placeholder="Departure date">
+          <input type="duration" id="tripDuration" name="duration" placeholder="How many nights?">
+          <input type="number" id="tripNumTravelers" name="travelers" placeholder="# of travelers">
+          <button class="submit-buttons" id="submitTripButton">Let's go!</button>
+        </form>
+      </section>
+    </section>
+    <section class="trip-display">
+      <section class="trip-sections" id="pastTripsSection">
+        <h2 class="trip-headings" id="pastTripsHeading">Your Past Trips</h2>
+        <!-- Inject past trips here, below is a proto-->
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
+        <article class="past-trip-total">
+          <p id="pastTripTotalCost">Total trip cost: $749375</p>
+        </article>
+      </section>
+      <section class="trip-sections" id="pendingTripsSection">
+        <h2 class="trip-headings" id="pendingTripsHeading">Your Pending Trips</h2>
+        <!-- Inject pending trips here, below is a proto-->
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
+      </section>
+      <section class="trip-sections" id="upcomingTripsSection">
+        <h2 class="trip-headings" id="upcomingTripsHeading">Your Upcoming Trips</h2>
+        <!-- Inject upcoming trips here, below is a proto-->
+        <article class="trip-tile">
+          <p class="trip-tile-copy">
+            12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378
+          </p>
+        </article>
+      </section>
+    </section>
+  </main>
   <script src="bundle.js"></script>
-
 </body>
 </html>
