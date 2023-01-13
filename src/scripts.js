@@ -28,7 +28,6 @@ window.addEventListener('load', () => {
 
 submitTripButton.addEventListener('click', () => {
   submitTripRequest(event);
-  updateDOM();
 })
 
 // Functions
@@ -42,11 +41,9 @@ function resolvePromises() {
       //Could make a helper for these
       currentTraveler.addPastTrips(allTrips);
       currentTraveler.addPendingTrips(allTrips);
-      //currentTraveler
+      currentTraveler.addUpcomingTrips(allTrips);
       updateDOM();
       console.log('allTrips', allTrips)
-      console.log('currentUser',currentTraveler);
-      console.log('pendingTrips on load', currentTraveler.pendingTrips)
     })
 }
 
@@ -62,7 +59,7 @@ function updateDOM() {
   userName.innerText = currentTraveler.name;
   displayTrips(currentTraveler.pastTrips);
   displayTrips(currentTraveler.pendingTrips);
-  // displayTrips(currentTraveler.upcomingTrips);
+  displayTrips(currentTraveler.upcomingTrips);
   setTodaysDateToMin();
   createDestinationOptions();
 };
@@ -71,6 +68,7 @@ function displayTrips(tripsToDisplay) {
   let sortedTrips;
   if (tripsToDisplay === currentTraveler.pastTrips) {
     sortedTrips = sortTripsForDisplay(tripsToDisplay);
+    pastTripsDisplay.innerHTML = '';
     sortedTrips.forEach(trip => {
       pastTripsDisplay.innerHTML += 
       `<article class="trip-tile">
@@ -81,6 +79,7 @@ function displayTrips(tripsToDisplay) {
     });
   } else if (tripsToDisplay === currentTraveler.pendingTrips) {
     sortedTrips = sortTripsForDisplay(tripsToDisplay);
+    pendingTripsDisplay.innerHTML = '';
     sortedTrips.forEach(trip => {
       pendingTripsDisplay.innerHTML += 
       `<article class="trip-tile">
@@ -91,6 +90,7 @@ function displayTrips(tripsToDisplay) {
     });
   } else if (tripsToDisplay === currentTraveler.upcomingTrips) {
     sortedTrips = sortTripsForDisplay(tripsToDisplay);
+    upcomingTripsDisplay.innerHTML = '';
     sortedTrips.forEach(trip => {
       upcomingTripsDisplay.innerHTML += 
       `<article class="trip-tile">
@@ -176,8 +176,8 @@ function submitTripRequest(event) {
   apicalls.postTripRequest(postData)
     .then(data => {
       console.log('Trip posted successfully', data);
-      currentTraveler.pendingTrips.push(data.newTrip)
-      console.log('curretTraveler after post', currentTraveler)
+      currentTraveler.pendingTrips.push(new Trip (data.newTrip, allTrips))
+      displayTrips(currentTraveler.pendingTrips);
     })
-    .catch('Post error');
+    .catch(alert('Your trip request failed to send to the server. Please try resubmitting your request.'));
 };
