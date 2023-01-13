@@ -1,8 +1,8 @@
 import destinations from "../test/destinations-test-data";
 
 class Trip {
-  constructor(tripDetails) {
-    this.id = tripDetails.id || +(new Date());
+  constructor(tripDetails, allTrips) {
+    this.id = tripDetails.id || (allTrips.length + 1);
     this.userID = tripDetails.userID;
     this.destinationID = tripDetails.destinationID;
     this.destinationDetails = this.addDestinationDetails(tripDetails.destinationID);

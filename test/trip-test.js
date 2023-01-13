@@ -18,7 +18,7 @@ describe('Trip', function() {
       'date': "2023/08/02",
       'duration': 14,
       'status': 'pending',
-    });
+    }, trips);
   });
 
   it('should be an instance of Trip', function() {
@@ -26,7 +26,7 @@ describe('Trip', function() {
   });
 
   it('should have properties of id, userID, destinationID, travelers, date, duration, status, suggestedActivities, and estimatedCost', function() {
-    expect(newTrip.id).to.equal(new Date().toString());
+    expect(newTrip.id).to.equal(18);
     expect(newTrip.userID).to.equal(1);
     expect(newTrip.destinationID).to.equal(32);
     expect(newTrip.travelers).to.equal(4);

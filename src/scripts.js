@@ -22,25 +22,31 @@ let allDestinations;
 window.addEventListener('load', () => {
   // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
   // Will likely need to move this to a submit event listener and remove from here
-  singleTravelerPromise = apicalls.getSingleTraveler(3);
+  singleTravelerPromise = apicalls.getSingleTraveler(7);
   resolvePromises();
 })
 
 submitTripButton.addEventListener('click', () => {
   submitTripRequest(event);
+  updateDOM();
 })
 
 // Functions
 function resolvePromises() {
   Promise.all([allTravelersPromise, singleTravelerPromise, allTripsPromise, allDestinationsPromise])
     .then(data => {
-      console.log(data)
       currentTraveler = data[1];
       allTrips = data[2].trips;
       allDestinations = data[3].destinations;
       currentTraveler = new Traveler(currentTraveler);
-      console.log('currentTraveler', currentTraveler);
+      //Could make a helper for these
+      currentTraveler.addPastTrips(allTrips);
+      currentTraveler.addPendingTrips(allTrips);
+      //currentTraveler
       updateDOM();
+      console.log('allTrips', allTrips)
+      console.log('currentUser',currentTraveler);
+      console.log('pendingTrips on load', currentTraveler.pendingTrips)
     })
 }
 
@@ -53,38 +59,89 @@ function resolvePromises() {
 // }
 
 function updateDOM() {
-  displayUserDOM();
+  userName.innerText = currentTraveler.name;
+  displayTrips(currentTraveler.pastTrips);
+  displayTrips(currentTraveler.pendingTrips);
+  // displayTrips(currentTraveler.upcomingTrips);
   setTodaysDateToMin();
   createDestinationOptions();
-}
+};
 
-function displayUserDOM() {
-  userName.innerText = currentTraveler.name;
-  currentTraveler.pastTrips.forEach(trip => {
-    pastTripsDisplay.innerHTML += 
-    `<article class="trip-tile">
-      <p class="trip-tile-copy">
-        ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
-      </p>
-    </article>`
-  })
-}
+function displayTrips(tripsToDisplay) {
+  let sortedTrips;
+  if (tripsToDisplay === currentTraveler.pastTrips) {
+    sortedTrips = sortTripsForDisplay(tripsToDisplay);
+    sortedTrips.forEach(trip => {
+      pastTripsDisplay.innerHTML += 
+      `<article class="trip-tile">
+        <p class="trip-tile-copy">
+          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+        </p>
+      </article>`;
+    });
+  } else if (tripsToDisplay === currentTraveler.pendingTrips) {
+    sortedTrips = sortTripsForDisplay(tripsToDisplay);
+    sortedTrips.forEach(trip => {
+      pendingTripsDisplay.innerHTML += 
+      `<article class="trip-tile">
+        <p class="trip-tile-copy">
+          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+        </p>
+      </article>`;
+    });
+  } else if (tripsToDisplay === currentTraveler.upcomingTrips) {
+    sortedTrips = sortTripsForDisplay(tripsToDisplay);
+    sortedTrips.forEach(trip => {
+      upcomingTripsDisplay.innerHTML += 
+      `<article class="trip-tile">
+        <p class="trip-tile-copy">
+          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+        </p>
+      </article>`;
+    });
+  }
+
+  // sortedTrips.forEach(trip => {
+  //   innerHTMLToAdd += 
+  //   `<article class="trip-tile">
+  //     <p class="trip-tile-copy">
+  //       ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+  //     </p>
+  //   </article>`
+  // });
+};
 
 function convertDateForDOM(date) {
   let dateYear = +(date.slice(0, 4));
   let dateMonth = +(date.slice(5, 7));
   let dateDay = +(date.slice(8, 10));
   return `${dateMonth}/${dateDay}/${dateYear}`
-}
+};
+
+// Only sorting by year and then month
+// Could build more conditions in this to sort by day
+function sortTripsForDisplay(trips) {
+  trips.sort((a, b) => {
+    if (+(a.date.slice(0, 4)) > +(b.date.slice(0, 4))) {
+      a = 1;
+      b = 0;
+    } else if (+(a.date.slice(0, 4)) < +(b.date.slice(0, 4))) {
+      a = 0;
+      b = 1;
+    } else if (+(a.date.slice(0, 4)) === +(b.date.slice(0, 4))) {
+      +a.date.slice(5, 7) >= +b.date.slice(5, 7) ? (a = 1, b = 0) : (a = 0, b = 1);
+    }
+    return (b - a);
+  });
+  return trips;
+};
 
 function createDestinationOptions() {
   let sortedDest = allDestinations.sort((a, b) => a.destination < b.destination ? -1 : 1);
-  console.log(sortedDest);
   sortedDest.forEach(dest => {
     destinationDropdown.innerHTML += `<option value="${dest.id}">${dest.destination}</option>`;
   })
-  
-}
+};
 
 function setTodaysDateToMin() {
   let today = new Date();
@@ -93,12 +150,10 @@ function setTodaysDateToMin() {
 	let yyyy = today.getFullYear();
 	today = `${yyyy}-${mm}-${dd}`;
 	tripDepartureDate.setAttribute("min", today);
-}
+};
 
 function submitTripRequest(event) {
   event.preventDefault();
-  // collect input values, instatiate new trip, use Kirsten's idea on allTrips.length for id?
-  // then divvy that object out in to the post below.
   let newTrip = new Trip({
     'userID': currentTraveler.id,
     'destinationID': +(destinationDropdown.value),
@@ -106,7 +161,7 @@ function submitTripRequest(event) {
     'date': tripDepartureDate.value.replaceAll('-', '/'),
     'duration': +(tripDuration.value),
     'status': 'pending',
-  })
+  }, allTrips)
   let postData = {
   'id': newTrip.id, 
   'userID': newTrip.userID,
@@ -121,6 +176,8 @@ function submitTripRequest(event) {
   apicalls.postTripRequest(postData)
     .then(data => {
       console.log('Trip posted successfully', data);
+      currentTraveler.pendingTrips.push(data.newTrip)
+      console.log('curretTraveler after post', currentTraveler)
     })
     .catch('Post error');
 };
