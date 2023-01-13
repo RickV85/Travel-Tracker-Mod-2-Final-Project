@@ -65,9 +65,13 @@ h2 {
 }
 
 .trip-request-section-top {
-  height: 4.5vh;
-  text-align: center;
+  height: 6vh;
+  text-align: left;
   font-size: 12px;
+}
+
+#tripRequestTitle {
+  margin-left: 2vw;
 }
 
 .trip-request-section-bottom {
@@ -77,7 +81,7 @@ h2 {
 .trip-request-form {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -87,7 +91,36 @@ h2 {
 
 input, select {
   height: 7vh;
+  border-width: 0px;
   border-radius: 10px;
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color:#086375;
+}
+
+#destinationDropdown {
+  width: 22vw;
+  margin-left: 2vw;
+}
+
+#tripDepartureDate {
+  width: 16vw;
+  margin-left: 2vw;
+}
+
+#tripDuration {
+  width: 16vw;
+  margin-left: 2vw;
+}
+
+#tripNumTravelers {
+  width: 16vw;
+  margin-left: 2vw;
+}
+
+#submitTripButton {
+  width: 10vw;
+  margin-left: 2vw;
 }
 
 .submit-buttons {
@@ -123,10 +156,13 @@ input, select {
   outline-color:#086375;
   border-radius: 20px;
   overflow-y: scroll;
+  overflow-wrap: normal;
 }
 
 .trip-headings {
   height: 5vh;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .trip-tile {

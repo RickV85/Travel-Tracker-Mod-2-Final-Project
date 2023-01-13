@@ -33,7 +33,7 @@ function resolvePromises() {
       console.log(data)
       currentTraveler = data[1];
       allTrips = data[2].trips;
-      allDestinations = data[3];
+      allDestinations = data[3].destinations;
       currentTraveler = new Traveler(currentTraveler);
       console.log('currentTraveler', currentTraveler);
       updateDOM();
@@ -74,7 +74,9 @@ function convertDateForDOM(date) {
 }
 
 function createDestinationOptions() {
-  allDestinations.destinations.forEach(dest => {
+  let sortedDest = allDestinations.sort((a, b) => a.destination < b.destination ? -1 : 1);
+  console.log(sortedDest);
+  sortedDest.forEach(dest => {
     destinationDropdown.innerHTML += `<option value="${dest.id}">${dest.destination}</option>`;
   })
   
