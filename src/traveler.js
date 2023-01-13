@@ -1,22 +1,23 @@
 import destinations from "../test/destinations-test-data";
 import Trip from "./trip"
+import trips from "../test/trips-test-data"
 
 class Traveler {
   constructor(traveler) {
     this.id = traveler.id;
     this.name = traveler.name;
     this.travelerType = traveler.travelerType;
-    this.pastTrips = [];
+    this.pastTrips = this.addPastTrips(trips);
     this.upcomingTrips = [];
     this.pendingTrips = [];
-    this.amountSpentInLastYear = 0;
+    this.amountSpentInLastYear = this.calculateSpendInLastYear();
   }
 
   addPastTrips(trips) {
     let userTrips = trips.filter(trip => trip.userID === this.id);
     let approvedTrips = userTrips.filter(trip => trip.status === "approved");
     let approvedPastTrips = approvedTrips.map(trip => new Trip(trip))
-    this.pastTrips = approvedPastTrips;
+    return approvedPastTrips;
   }
 
   calculateSpendInLastYear() {
@@ -48,7 +49,7 @@ class Traveler {
       
       return total += tripTotal;
     }, 0);
-    this.amountSpentInLastYear = totalForPastTrips;
+    return totalForPastTrips;
   }
   
 }

@@ -81,6 +81,10 @@ h2 {
   align-items: center;
 }
 
+#destinationDropdown {
+  width: 20vw;
+}
+
 input, select {
   height: 7vh;
   border-radius: 10px;
@@ -126,7 +130,7 @@ input, select {
 }
 
 .trip-tile {
-  height: 14vh;
+  height: 16vh;
   width: 24vw;
   background-color: white;
   outline-color: #086375;
@@ -137,8 +141,9 @@ input, select {
 }
 
 .trip-tile-copy {
-  font-size: 11px;
-  margin-left: 3px;
+  font-size: 12px;
+  padding-left: 7px;
+  padding-top: 4px;
 }
 
 .past-trip-total {

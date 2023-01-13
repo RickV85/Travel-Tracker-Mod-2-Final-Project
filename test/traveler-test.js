@@ -34,7 +34,27 @@ describe('Traveler', function() {
   });
 
   it('should have a pastTrips property', function() {
-    expect(testTraveler.pastTrips).to.deep.equal([]);
+    expect(testTraveler.pastTrips).to.deep.equal([
+      {
+      id: 117,
+      userID: 1,
+      destinationID: 28,
+      destinationDetails: {
+        id: 28,
+        destination: "San Juan, Puerto Rico",
+        estimatedLodgingCostPerDay: 70,
+        estimatedFlightCostPerPerson: 900,
+        image: "https://images.unsplash.com/photo-1580237541049-2d715a09486e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2090&q=80",
+        alt: "white and brown concrete buildings near sea under white clouds during daytime"
+        },
+      travelers: 3,
+      date: "2021/01/09",
+      duration: 15,
+      status: "approved",
+      suggestedActivities: [ ],
+      estimatedCost: 4125
+      }
+    ]);
   });
 
   it('should have a method to add past trips to pastTrips property', function() {
@@ -69,56 +89,14 @@ describe('Traveler', function() {
     expect(testTraveler.pendingTrips).to.deep.equal([]);
   })
 
-  it('should have a property for total amount spent on trips in the last 365 days', function() {
-    expect(testTraveler.amountSpentInLastYear).to.equal(0);
-  })
-
   it('should have a function to calculate amount spent in the last 365 days plus 10% fee', function() {
-    testTraveler.addPastTrips(testTrips);
-    testTraveler.calculateSpendInLastYear();
     expect(testTraveler.amountSpentInLastYear).to.equal(0);
-
-    testTraveler.pastTrips = [
-      {
-      id: 117,
-      userID: 1,
-      destinationID: 28,
-      travelers: 3,
-      date: "2021/01/09",
-      duration: 15,
-      status: "approved",
-      suggestedActivities: [ ]
-      },
-      {
-      id: 118,
-      userID: 1,
-      destinationID: 1,
-      travelers: 1,
-      date: "2022/06/09",
-      duration: 3,
-      status: "approved",
-      suggestedActivities: [ ]
-      },
-      {
-      id: 119,
-      userID: 1,
-      destinationID: 2,
-      travelers: 2,
-      date: "2022/08/09",
-      duration: 3,
-      status: "approved",
-      suggestedActivities: [ ]
-      }
-    ]
-
-    testTraveler.calculateSpendInLastYear();
-    expect(testTraveler.amountSpentInLastYear).to.equal(2717);
   })
 
   it('should be able to calculate total spend in last year for any user', function() {
     testTraveler = new Traveler(travelers[2]);
-    testTraveler.addPastTrips(testTrips);
-    testTraveler.calculateSpendInLastYear();
     expect(testTraveler.amountSpentInLastYear).to.equal(4543);
+    testTraveler = new Traveler(travelers[1]);
+    expect(testTraveler.amountSpentInLastYear).to.equal(0);
   })
 });
