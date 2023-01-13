@@ -17,7 +17,7 @@ describe('Traveler', function() {
     testTraveler = new Traveler(travelers[0]);
     testTraveler.addPastTrips(testTrips);
     testTraveler.addPendingTrips(testTrips);
-    //testTraveler.addUpcomingTrips(testTrips);
+    testTraveler.addUpcomingTrips(testTrips);
     testTraveler.calculateSpendInLastYear();
   });
 
@@ -37,7 +37,13 @@ describe('Traveler', function() {
     expect(testTraveler.travelerType).to.equal("relaxer");
   });
 
-  it('should have a method for adding trips to pastTrips property upon instatiation', function() {
+  it('should have properties to hold past, pending and upcoming trips', function() {
+    expect(testTraveler).to.haveOwnProperty('pastTrips');
+    expect(testTraveler).to.haveOwnProperty('pendingTrips');
+    expect(testTraveler).to.haveOwnProperty('upcomingTrips');
+  })
+
+  it('should have a method for adding trips to pastTrips property', function() {
     expect(testTraveler.pastTrips).to.deep.equal([
       {
       id: 117,
@@ -61,49 +67,6 @@ describe('Traveler', function() {
     ]);
   });
 
-  it('should have properties for upcoming and pending trips', function() {
-    expect(testTraveler.upcomingTrips).to.deep.equal([]);
-    expect(testTraveler.pendingTrips).to.deep.equal([
-      {
-      id: 1003,
-      userID: 1,
-      destinationID: 3,
-      destinationDetails: {
-        id: 3,
-        destination: "Sydney, Austrailia",
-        estimatedLodgingCostPerDay: 130,
-        estimatedFlightCostPerPerson: 950,
-        image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80",
-        alt: "opera house and city buildings on the water with boats"
-        },
-      travelers: 3,
-      date: "2023/05/02",
-      duration: 3,
-      status: "pending",
-      suggestedActivities: [ ],
-      estimatedCost: 3564
-      },
-      {
-      id: 1004,
-      userID: 1,
-      destinationID: 10,
-      destinationDetails: {
-        id: 10,
-        destination: "Toronto, Canada",
-        estimatedLodgingCostPerDay: 90,
-        estimatedFlightCostPerPerson: 450,
-        image: "https://images.unsplash.com/photo-1535776142635-8fa180c46af7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2756&q=80"
-        },
-      travelers: 3,
-      date: "2023/06/02",
-      duration: 3,
-      status: "pending",
-      suggestedActivities: [ ],
-      estimatedCost: 1782
-      },
-    ]);
-  })
-
   it('should have a function to calculate amount spent in the last 365 days plus 10% fee', function() {
     expect(testTraveler.amountSpentInLastYear).to.equal(0);
   })
@@ -119,7 +82,7 @@ describe('Traveler', function() {
     expect(testTraveler.amountSpentInLastYear).to.equal(0);
   })
 
-  it('should have a method to add pending trips on instatiation', function() {
+  it('should have a method to add pending trips to pendingTrips property', function() {
     expect(testTraveler.pendingTrips).to.deep.equal([
       {
       id: 1003,
@@ -159,6 +122,49 @@ describe('Traveler', function() {
       estimatedCost: 1782
       },
     ]);
+  });
+
+  it('should have a method to add upcoming trips to upcomingTrips property', function() {
+    expect(testTraveler.upcomingTrips).to.deep.equal([
+      {
+      id: 1001,
+      userID: 1,
+      destinationID: 32,
+      destinationDetails: {
+        id: 32,
+        destination: "Kathmandu, Nepal",
+        estimatedLodgingCostPerDay: 45,
+        estimatedFlightCostPerPerson: 1200,
+        image: "https://images.unsplash.com/photo-1558799401-1dcba79834c2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80",
+        alt: "temple with buntings during daytime"
+      },
+      travelers: 3,
+      date: "2023/03/02",
+      duration: 3,
+      status: "approved",
+      suggestedActivities: [ ],
+      estimatedCost: 4109,
+      },
+      {
+      id: 1002,
+      userID: 1,
+      destinationID: 20,
+      destinationDetails: {
+        id: 20,
+        destination: "Miami, Florida",
+        estimatedLodgingCostPerDay: 158,
+        estimatedFlightCostPerPerson: 275,
+        image: "https://images.unsplash.com/photo-1514214246283-d427a95c5d2f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1573&q=80",
+        alt: "sand with palm trees and tall buildings in the background"
+        },
+      travelers: 2,
+      date: "2023/04/02",
+      duration: 2,
+      status: "approved",
+      suggestedActivities: [ ],
+      estimatedCost: 953,
+      }
+    ])
   })
 
 });

@@ -59,6 +59,35 @@ class Traveler {
     this.pendingTrips = pendingTrips.map(trip => new Trip(trip, allTestTrips))
   }
 
+  addUpcomingTrips(tripsToFilter) {
+    let today = this.returnTodaysDate();
+    let yyyy = +(today.slice(0, 4));
+    let mm = +(today.slice(5, 7));
+    let dd = +(today.slice(8, 10));
+
+    let userTrips = tripsToFilter.filter(trip => trip.userID === this.id);
+    let approvedTrips = userTrips.filter(trip => trip.status === "approved");
+    let approvedFutureTrips = approvedTrips.reduce((futureTrips, trip) => {
+      let tripYear = +(trip.date.slice(0, 4));
+      let tripMonth = +(trip.date.slice(5, 7));
+      let tripDay = +(trip.date.slice(8, 10));
+      // filter for dates only in the future
+      // if tripYear is less than current year its not in the future
+      if (tripYear < +(yyyy)) {
+        return futureTrips;
+        // if tripYear is = to current year AND tripMonth less than current month, its not in the future
+      } else if (tripYear === yyyy && tripMonth < +(mm)) {
+        return futureTrips;
+        // if trip year is current year AND trip month is the current month AND tripDay is less than current day, its not in the future
+      } else if (tripYear === +(yyyy) && tripMonth === +(mm) && tripDay < +(dd)) {
+        return futureTrips;
+      }
+      futureTrips.push(new Trip(trip, allTestTrips));
+      return futureTrips;
+    }, [])
+    this.upcomingTrips = approvedFutureTrips;
+  }
+
   calculateSpendInLastYear() {
     let today = this.returnTodaysDate();
     let yyyy = +(today.slice(0, 4));
@@ -88,8 +117,7 @@ class Traveler {
       return total += tripTotal;
     }, 0);
     this.amountSpentInLastYear = totalForPastTrips;
-  }
-  
-}
+  };
+};
 
 export default Traveler;
