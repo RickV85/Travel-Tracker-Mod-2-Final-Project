@@ -2,6 +2,7 @@
 import './css/styles.css';
 import apicalls from './apiCalls';
 import Traveler from './traveler';
+import Trip from './trip';
 
 // Promises
 let allTravelersPromise = apicalls.getAllTravelers();
@@ -26,7 +27,7 @@ window.addEventListener('load', () => {
 })
 
 submitTripButton.addEventListener('click', () => {
-  alert('clicked')
+  submitTripRequest(event);
 })
 
 // Functions
@@ -93,3 +94,33 @@ function setTodaysDateToMin() {
 	today = `${yyyy}-${mm}-${dd}`;
 	tripDepartureDate.setAttribute("min", today);
 }
+
+function submitTripRequest(event) {
+  event.preventDefault();
+  // collect input values, instatiate new trip, use Kirsten's idea on allTrips.length for id?
+  // then divvy that object out in to the post below.
+  let newTrip = new Trip({
+    'userID': currentTraveler.id,
+    'destinationID': +(destinationDropdown.value),
+    'travelers': +(tripNumTravelers.value),
+    'date': tripDepartureDate.value.replaceAll('-', '/'),
+    'duration': +(tripDuration.value),
+    'status': 'pending',
+  })
+  let postData = {
+  'id': newTrip.id, 
+  'userID': newTrip.userID,
+  'destinationID': newTrip.destinationID,
+  'travelers': newTrip.travelers,
+  'date': newTrip.date,
+  'duration': newTrip.duration,
+  'status': newTrip.status,
+  'suggestedActivities': newTrip.suggestedActivities
+  };
+  console.log(postData);
+  apicalls.postTripRequest(postData)
+    .then(data => {
+      console.log('Trip posted successfully', data);
+    })
+    .catch('Post error');
+};

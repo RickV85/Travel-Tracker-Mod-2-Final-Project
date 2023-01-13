@@ -73,11 +73,11 @@ function getAllDestinations() {
     });
 };
 
-function postTripRequest(data) {
+function postTripRequest(postData) {
   let promise = fetch(`http://localhost:3001/api/v1/trips`, {
-    method: postTripRequest,
-    body: JSON.stringify(data),
-    headers: { 'Content-Type': 'application/json' }
+    method: 'POST',
+    body: JSON.stringify(postData),
+    headers: { "Content-Type": "application/json" }
   })
   .then(response => {
     if (!response.ok) {

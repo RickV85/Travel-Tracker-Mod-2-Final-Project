@@ -2,7 +2,7 @@ import destinations from "../test/destinations-test-data";
 
 class Trip {
   constructor(tripDetails) {
-    this.id = tripDetails.id || new Date().toString();
+    this.id = tripDetails.id || +(new Date());
     this.userID = tripDetails.userID;
     this.destinationID = tripDetails.destinationID;
     this.destinationDetails = this.addDestinationDetails(tripDetails.destinationID);
