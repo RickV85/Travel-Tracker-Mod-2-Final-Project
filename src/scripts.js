@@ -22,8 +22,11 @@ window.addEventListener('load', () => {
   // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
   // Will likely need to move this to a submit event listener and remove from here
   singleTravelerPromise = apicalls.getSingleTraveler(3);
-
   resolvePromises();
+})
+
+submitTripButton.addEventListener('click', () => {
+  alert('clicked')
 })
 
 // Functions
