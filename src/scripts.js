@@ -17,7 +17,6 @@ let allDestinations;
 
 // Query selectors
 
-
 // Event listeners
 window.addEventListener('load', () => {
   // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
@@ -26,8 +25,18 @@ window.addEventListener('load', () => {
   resolvePromises();
 })
 
+quoteTripButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  tripConfirmModal.showModal();
+});
+
+modalGoBack.addEventListener('click', () => {
+  tripConfirmModal.close();
+})
+
 submitTripButton.addEventListener('click', () => {
   submitTripRequest(event);
+  tripConfirmModal.close();
 })
 
 // Functions
@@ -163,12 +172,11 @@ function submitTripRequest(event) {
   'status': newTrip.status,
   'suggestedActivities': newTrip.suggestedActivities
   };
-  console.log(postData);
   apicalls.postTripRequest(postData)
     .then(data => {
       console.log('Trip posted successfully', data);
       currentTraveler.pendingTrips.push(new Trip (data.newTrip, allTrips))
       displayTrips(currentTraveler.pendingTrips);
     })
-    .catch(alert('Your trip request failed to send to the server. Please try resubmitting your request.'));
+    .catch('Your trip request failed to send to the server. Please try resubmitting your request.');
 };

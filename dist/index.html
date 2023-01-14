@@ -8,14 +8,14 @@
   <title>Travel Tracker by Rick Vermeil</title>
 </head>
 <body>
-  <header class="header">
+  <header class="header" id="header">
     <h1 class="site-title">Travel Tracker</h1>
     <div class="header-user-profile">
       <p id="userName"></p>
       <img id="userIcon" src="https://img.icons8.com/external-gradak-royyan-wijaya/24/000000/B2FF9E/external-circle-gradak-user-gradak-royyan-wijaya.png"/>  
     </div>
   </header>
-  <main class="main-display">
+  <main class="main-display" id="mainDisplay">
     <section class="trip-request-section">
       <section class="trip-request-section-top">
         <h2 id="tripRequestTitle">Let's book a trip!</h2>
@@ -28,7 +28,18 @@
           <input type="date" id="tripDepartureDate" name="departure_date" min="" placeholder="Departure date" required>
           <input type="number" id="tripDuration" name="duration" min="1" placeholder="How many nights?" required>
           <input type="number" id="tripNumTravelers" name="travelers" min="1" placeholder="# of travelers" required>
-          <button type="submit" class="submit-buttons" id="submitTripButton">Let's go!</button>
+          <button class="submit-buttons" id="quoteTripButton">Let's go!</button>
+          <dialog id="tripConfirmModal">
+            <div class="trip-confirm-contents">
+              <h2 id="tripConfirmHeader">Request to book your trip</h2>
+              <!-- Inject interpolated message here with estimated trip total -->
+              <p>Your trip is expensive, would you like to request to book?</p>
+              <div class="trip-request-options">
+                <button class="submit-buttons trip-request-buttons" id="modalGoBack">Go back</button>
+                <button type="submit" class="submit-buttons trip-request-buttons" id="submitTripButton">Request to book!</button>
+              </div>
+            </div>
+          </dialog>
         </form>
       </section>
     </section>
