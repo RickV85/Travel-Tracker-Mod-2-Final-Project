@@ -15,11 +15,11 @@ body {
 
 h2 {
   color: #3C1642;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .header {
-  height: 11vh;
+  height: 10vh;
   background-color: #3C1642;
   display: flex;
   flex-direction: row;
@@ -28,10 +28,10 @@ h2 {
 }
 
 .site-title {
-  font-size: 30px;
+  font-size: 36px;
   font-weight: 700;
   color: #AFFC41;
-  margin-left: 4vw;
+  margin-left: 2.5vw;
 }
 
 .header-user-profile {
@@ -43,11 +43,13 @@ h2 {
 
 #userName {
   margin-right: 10px;
+  font-size: 16px;
   font-weight: 600;
 }
 
 .main-display {
-  height: 89vh;
+  height: 90vh;
+  width: 100vw;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -56,7 +58,7 @@ h2 {
 }
 
 .trip-request-section {
-  width: 92vw;
+  width: 95vw;
   background-color: #B0CDD3;
   outline-style: solid;
   outline-width: 1px;
@@ -65,9 +67,14 @@ h2 {
 }
 
 .trip-request-section-top {
-  height: 4.5vh;
-  text-align: center;
+  height: 6vh;
+  text-align: left;
   font-size: 12px;
+}
+
+#tripRequestTitle {
+  margin-left: 3vw;
+  font-size: 24px;
 }
 
 .trip-request-section-bottom {
@@ -77,24 +84,96 @@ h2 {
 .trip-request-form {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+}
+
+#tripConfirmModal {
+  height: 25vw;
+  width: 50vw;
+  margin: 50vh auto 0;
+  transform: translateY(-50%);
+}
+
+.trip-confirm-contents {
+  height: 25vw;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align: center;
+}
+
+#modalTripQuote {
+  font-size: 16px;
+}
+
+.trip-request-options {
+  width: 50vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.trip-request-buttons {
+  width: 20vw;
+  margin: 2vw;
+}
+
+#tripConfirmModal::backdrop {
+  background: #00000049;
+}
+
+#destinationDropdown {
+  width: 20vw;
 }
 
 input, select {
   height: 7vh;
+  border-width: 0px;
   border-radius: 10px;
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color:#086375;
+  padding-left: 10px;
+  font-size: 16px;
+}
+
+#destinationDropdown {
+  width: 24vw;
+  margin-left: 3vw;
+}
+
+#tripDepartureDate {
+  width: 14vw;
+  margin-left: 2.5vw;
+}
+
+#tripDuration {
+  width: 14vw;
+  margin-left: 2.5vw;
+}
+
+#tripNumTravelers {
+  width: 14vw;
+  margin-left: 2.5vw;
+}
+
+#quoteTripButton {
+  margin-left: 3vw;
+  width: 12.5vw;
 }
 
 .submit-buttons {
-  height: 40px;
-  width: 70px;
+  height: 7vh;
   background-color:#3C1642;
   color: #AFFC41;
   font-family: 'Saira', sans-serif;
   font-weight: 700;
+  font-size: 20px;
   outline-style: solid;
-  outline-width: 1px;
+  outline-width: 2px;
   outline-color:#AFFC41;
   border-radius: 10px;
 }
@@ -108,7 +187,7 @@ input, select {
 
 .trip-sections {
   height: 65vh;
-  width: 28vw;
+  width: 30vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,14 +198,17 @@ input, select {
   outline-color:#086375;
   border-radius: 20px;
   overflow-y: scroll;
+  overflow-wrap: normal;
 }
 
 .trip-headings {
   height: 5vh;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .trip-tile {
-  height: 14vh;
+  height: 16vh;
   width: 24vw;
   background-color: white;
   outline-color: #086375;
@@ -134,22 +216,30 @@ input, select {
   outline-style: solid;
   border-radius: 10px;
   margin-bottom: 2vh;
+  overflow-y: scroll;
 }
 
 .trip-tile-copy {
-  font-size: 11px;
-  margin-left: 3px;
+  font-size: 14px;
+  padding-left: 7px;
+  padding-top: 4px;
 }
 
 .past-trip-total {
-  height: 6vh;
-  width: fit-content;
+  height: fit-content;
+  width: 24vw;
+  text-align: center;
+  font-weight: 600;
   background-color: white;
   border-radius: 10px;
   outline-color: #086375;
   outline-width: 1px;
   outline-style: solid;
-  margin: 4px;
+  margin-bottom: 2vh;
   padding: 4px;
   font-size: 14px;
+}
+
+.hidden {
+  display: none;
 }

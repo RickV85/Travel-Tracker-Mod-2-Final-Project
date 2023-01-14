@@ -129,5 +129,46 @@ const trips = [
   status: "approved",
   suggestedActivities: [ ]
   },
+  // Add pending/upcoming trips
+  {
+  id: 1001,
+  userID: 1,
+  destinationID: 32,
+  travelers: 3,
+  date: "2023/03/02",
+  duration: 3,
+  status: "approved",
+  suggestedActivities: [ ]
+  },
+  {
+  id: 1002,
+  userID: 1,
+  destinationID: 20,
+  travelers: 2,
+  date: "2023/04/02",
+  duration: 2,
+  status: "approved",
+  suggestedActivities: [ ]
+  },
+  {
+  id: 1003,
+  userID: 1,
+  destinationID: 3,
+  travelers: 3,
+  date: "2023/05/02",
+  duration: 3,
+  status: "pending",
+  suggestedActivities: [ ]
+  },
+  {
+  id: 1004,
+  userID: 1,
+  destinationID: 10,
+  travelers: 3,
+  date: "2023/06/02",
+  duration: 3,
+  status: "pending",
+  suggestedActivities: [ ]
+  }
 ]
 module.exports = trips;

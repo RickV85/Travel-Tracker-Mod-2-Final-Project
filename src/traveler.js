@@ -1,4 +1,8 @@
 import destinations from "../test/destinations-test-data";
+import Trip from "./trip"
+import trips from "../test/trips-test-data";
+
+let allTestTrips = trips;
 
 class Traveler {
   constructor(traveler) {
@@ -11,18 +15,54 @@ class Traveler {
     this.amountSpentInLastYear = 0;
   }
 
-  addPastTrips(trips) {
-    let userTrips = trips.filter(trip => trip.userID === this.id);
-    let approvedTrips = userTrips.filter(trip => trip.status === "approved");
-    this.pastTrips = approvedTrips;
-  }
-
-  calculateSpendInLastYear() {
+  returnTodaysDate() {
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
 	  let mm = String(today.getMonth() + 1).padStart(2, '0');
 	  let yyyy = today.getFullYear();
 	  today = `${yyyy}-${mm}-${dd}`;
+    return today;
+  }
+
+  // Need to modify this to only be the last 365 days
+  // Could use logic from calculate below it and combine
+  addPastTrips(tripsToFilter) {
+    let today = this.returnTodaysDate();
+    let yyyy = +(today.slice(0, 4));
+    let mm = +(today.slice(5, 7));
+    let dd = +(today.slice(8, 10));
+
+    let userTrips = tripsToFilter.filter(trip => trip.userID === this.id);
+    let approvedTrips = userTrips.filter(trip => trip.status === "approved");
+    let approvedPastTrips = approvedTrips.reduce((pastTrips, trip) => {
+      let tripYear = +(trip.date.slice(0, 4));
+      let tripMonth = +(trip.date.slice(5, 7));
+      let tripDay = +(trip.date.slice(8, 10));
+      // if tripYear is greater than current year its not in the past
+      if (tripYear > +(yyyy)) {
+        return pastTrips;
+        // if tripYear is = to current year AND greater than current month, its not in the past
+      } else if (tripYear === yyyy && tripMonth > +(mm)) {
+        return pastTrips;
+        // if trip year is current year AND trip month is the current month AND tripDay is greater than current day, its not in the past
+      } else if (tripYear === +(yyyy) && tripMonth === +(mm) && tripDay > +(dd)) {
+        return pastTrips;
+      }
+      pastTrips.push(new Trip(trip, allTestTrips));
+      return pastTrips;
+    }, []);
+
+    // Could use reduce here to calculate the total and return it
+    // to combine with below method
+
+    this.pastTrips = approvedPastTrips;
+  };
+
+  calculateSpendInLastYear() {
+    let today = this.returnTodaysDate();
+    let yyyy = +(today.slice(0, 4));
+    let mm = +(today.slice(5, 7));
+    let dd = +(today.slice(8, 10));
 
     let totalForPastTrips = this.pastTrips.reduce((total, trip) => {
       let tripYear = +(trip.date.slice(0, 4));
@@ -47,8 +87,42 @@ class Traveler {
       return total += tripTotal;
     }, 0);
     this.amountSpentInLastYear = totalForPastTrips;
+  };
+
+  addPendingTrips(tripsToFilter) {
+    let userTrips = tripsToFilter.filter(trip => trip.userID === this.id);
+    let pendingTrips = userTrips.filter(trip => trip.status === "pending");
+    this.pendingTrips = pendingTrips.map(trip => new Trip(trip, allTestTrips))
   }
-  
-}
+
+  addUpcomingTrips(tripsToFilter) {
+    let today = this.returnTodaysDate();
+    let yyyy = +(today.slice(0, 4));
+    let mm = +(today.slice(5, 7));
+    let dd = +(today.slice(8, 10));
+
+    let userTrips = tripsToFilter.filter(trip => trip.userID === this.id);
+    let approvedTrips = userTrips.filter(trip => trip.status === "approved");
+    let approvedFutureTrips = approvedTrips.reduce((futureTrips, trip) => {
+      let tripYear = +(trip.date.slice(0, 4));
+      let tripMonth = +(trip.date.slice(5, 7));
+      let tripDay = +(trip.date.slice(8, 10));
+      // filter for dates only in the future
+      // if tripYear is less than current year its not in the future
+      if (tripYear < +(yyyy)) {
+        return futureTrips;
+        // if tripYear is = to current year AND tripMonth less than current month, its not in the future
+      } else if (tripYear === yyyy && tripMonth < +(mm)) {
+        return futureTrips;
+        // if trip year is current year AND trip month is the current month AND tripDay is less than current day, its not in the future
+      } else if (tripYear === +(yyyy) && tripMonth === +(mm) && tripDay < +(dd)) {
+        return futureTrips;
+      }
+      futureTrips.push(new Trip(trip, allTestTrips));
+      return futureTrips;
+    }, [])
+    this.upcomingTrips = approvedFutureTrips;
+  };
+};
 
 export default Traveler;

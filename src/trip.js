@@ -1,16 +1,17 @@
 import destinations from "../test/destinations-test-data";
 
 class Trip {
-  constructor(tripRequest) {
-    this.id = new Date().toString();
-    this.userID = tripRequest.userID;
-    this.destinationID = tripRequest.destinationID;
-    this.travelers = tripRequest.travelers;
-    this.date = tripRequest.date;
-    this.duration = tripRequest.duration;
-    this.status = tripRequest.status;
+  constructor(tripDetails, allTrips) {
+    this.id = tripDetails.id || (allTrips.length + 1);
+    this.userID = tripDetails.userID;
+    this.destinationID = tripDetails.destinationID;
+    this.destinationDetails = this.addDestinationDetails(tripDetails.destinationID);
+    this.travelers = tripDetails.travelers;
+    this.date = tripDetails.date;
+    this.duration = tripDetails.duration;
+    this.status = tripDetails.status;
     this.suggestedActivities = [];
-    this.estimatedCost = null;
+    this.estimatedCost = this.calculateCost();
   }
 
   calculateCost(){
@@ -18,8 +19,11 @@ class Trip {
     let tripLodgingCost = this.duration * tripDestination.estimatedLodgingCostPerDay;
     let tripAirfareCost = this.travelers * tripDestination.estimatedFlightCostPerPerson;
     let tripTotal = Math.round((tripLodgingCost + tripAirfareCost) * 1.1);
-    this.estimatedCost = tripTotal;
+    return tripTotal;
   }
 
+  addDestinationDetails(destID) {
+    return destinations.find(dest => dest.id === destID);
+  }
 };
 export default Trip;
