@@ -15,11 +15,11 @@ body {
 
 h2 {
   color: #3C1642;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .header {
-  height: 11vh;
+  height: 10vh;
   background-color: #3C1642;
   display: flex;
   flex-direction: row;
@@ -28,10 +28,10 @@ h2 {
 }
 
 .site-title {
-  font-size: 30px;
+  font-size: 36px;
   font-weight: 700;
   color: #AFFC41;
-  margin-left: 4vw;
+  margin-left: 2.8vw;
 }
 
 .header-user-profile {
@@ -43,11 +43,13 @@ h2 {
 
 #userName {
   margin-right: 10px;
+  font-size: 16px;
   font-weight: 600;
 }
 
 .main-display {
-  height: 89vh;
+  height: 90vh;
+  width: 100vw;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -56,7 +58,7 @@ h2 {
 }
 
 .trip-request-section {
-  width: 92vw;
+  width: 95vw;
   background-color: #B0CDD3;
   outline-style: solid;
   outline-width: 1px;
@@ -72,6 +74,7 @@ h2 {
 
 #tripRequestTitle {
   margin-left: 2vw;
+  font-size: 24px;
 }
 
 .trip-request-section-bottom {
@@ -96,6 +99,8 @@ input, select {
   outline-style: solid;
   outline-width: 1px;
   outline-color:#086375;
+  padding-left: 10px;
+  font-size: 16px;
 }
 
 #destinationDropdown {
@@ -120,7 +125,7 @@ input, select {
 
 #submitTripButton {
   width: 10vw;
-  margin-left: 2vw;
+  margin-left: 3.5vw;
 }
 
 .submit-buttons {
@@ -130,6 +135,7 @@ input, select {
   color: #AFFC41;
   font-family: 'Saira', sans-serif;
   font-weight: 700;
+  font-size: 16px;
   outline-style: solid;
   outline-width: 1px;
   outline-color:#AFFC41;
@@ -145,7 +151,7 @@ input, select {
 
 .trip-sections {
   height: 65vh;
-  width: 28vw;
+  width: 30vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -177,7 +183,7 @@ input, select {
 }
 
 .trip-tile-copy {
-  font-size: 12px;
+  font-size: 14px;
   padding-left: 7px;
   padding-top: 4px;
 }

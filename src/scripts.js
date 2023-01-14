@@ -38,7 +38,7 @@ function resolvePromises() {
       allTrips = data[2].trips;
       allDestinations = data[3].destinations;
       currentTraveler = new Traveler(currentTraveler);
-      //Could make a helper for these
+      //Could make a helper for these if I call them more
       currentTraveler.addPastTrips(allTrips);
       currentTraveler.addPendingTrips(allTrips);
       currentTraveler.addUpcomingTrips(allTrips);
@@ -99,16 +99,7 @@ function displayTrips(tripsToDisplay) {
         </p>
       </article>`;
     });
-  }
-
-  // sortedTrips.forEach(trip => {
-  //   innerHTMLToAdd += 
-  //   `<article class="trip-tile">
-  //     <p class="trip-tile-copy">
-  //       ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
-  //     </p>
-  //   </article>`
-  // });
+  };
 };
 
 function convertDateForDOM(date) {
