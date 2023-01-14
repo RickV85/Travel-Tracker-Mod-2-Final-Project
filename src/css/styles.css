@@ -221,14 +221,16 @@ input, select {
 }
 
 .past-trip-total {
-  height: 6vh;
-  width: fit-content;
+  height: fit-content;
+  width: 24vw;
+  text-align: center;
+  font-weight: 600;
   background-color: white;
   border-radius: 10px;
   outline-color: #086375;
   outline-width: 1px;
   outline-style: solid;
-  margin: 4px;
+  margin-bottom: 2vh;
   padding: 4px;
   font-size: 14px;
 }

@@ -24,6 +24,8 @@ class Traveler {
     return today;
   }
 
+  // Need to modify this to only be the last 365 days
+  // Could use logic from calculate below it and combine
   addPastTrips(tripsToFilter) {
     let today = this.returnTodaysDate();
     let yyyy = +(today.slice(0, 4));
@@ -36,7 +38,6 @@ class Traveler {
       let tripYear = +(trip.date.slice(0, 4));
       let tripMonth = +(trip.date.slice(5, 7));
       let tripDay = +(trip.date.slice(8, 10));
-      // filter for dates only in the future
       // if tripYear is greater than current year its not in the past
       if (tripYear > +(yyyy)) {
         return pastTrips;
@@ -51,7 +52,8 @@ class Traveler {
       return pastTrips;
     }, []);
 
-    // Use reduce here to calculate the total
+    // Could use reduce here to calculate the total and return it
+    // to combine with below method
 
     this.pastTrips = approvedPastTrips;
   };
