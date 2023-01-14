@@ -18,7 +18,7 @@ function getAllTravelers() {
       return allTravelers;
     })
     .catch((error) => {
-      console.log('Error fetching all travelers', error);
+      alert('Error while fetching all travelers. Please try reloading the page.', error);
     });
 };
 
@@ -35,7 +35,7 @@ function getSingleTraveler(id) {
       return singleTraveler;
     })
     .catch((error) => {
-      console.log('Error while fetching single traveler', error);
+      alert('Error while fetching traveler information. Please try reloading the page.', error);
     });
 };
 
@@ -52,7 +52,7 @@ function getAllTrips() {
       return allTrips;
     })
     .catch((error) => {
-      console.log('Error while fetching all trips', error);
+      alert('Error while fetching trips. Please try reloading the page.', error);
     });
 };
 
@@ -69,7 +69,7 @@ function getAllDestinations() {
       return allDestinations;
     })
     .catch((error) => {
-      console.log('Error while fetching all destinations', error)
+      alert('Error while fetching destinations. Please try reloading the page.', error)
     });
 };
 
@@ -81,7 +81,7 @@ function postTripRequest(postData) {
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error("Trip request failed to post")
+      throw new Promise.reject(error)
     }
     return response.json();
   })

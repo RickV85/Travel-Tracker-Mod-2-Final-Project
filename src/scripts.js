@@ -22,30 +22,28 @@ let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate
 window.addEventListener('load', () => {
   // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
   // Will likely need to move this to a submit event listener and remove from here
-  singleTravelerPromise = apicalls.getSingleTraveler(18);
+  // function to send a param to resolve promises for a single user?
+  singleTravelerPromise = apicalls.getSingleTraveler(3);
   resolvePromises();
 })
 
 quoteTripButton.addEventListener('click', (event) => {
   event.preventDefault();
-  //Add func call here for a new func that creates a new Trip
-  // then injects a message in to the modal with trip.estimatedCost
-  // based on details entered
-  tripConfirmModal.showModal();
+  openModalEstimateTrip();
 });
 
-modalGoBack.addEventListener('click', () => {
+modalGoBack.addEventListener('click', (event) => {
+  event.preventDefault();
   tripConfirmModal.close();
 })
 
 submitTripButton.addEventListener('click', (event) => {
   event.preventDefault();
   submitTripRequest();
-  // Could add timeout and add a confirmation message "An agent will contact you soon to approve your booking"
-  tripConfirmModal.close();
-  inputs.forEach(input => {
-    input.value = '';
-  })
+  showThankYouMessage();
+  setTimeout(() => {
+    closeModalClearInputs();
+  }, 3000);
 })
 
 // Functions
@@ -122,6 +120,48 @@ function displayTrips(tripsToDisplay) {
   };
 };
 
+  //Add func call here for a new func that creates a new Trip
+  // then injects a message in to the modal with trip.estimatedCost
+  // based on details entered
+function openModalEstimateTrip() {
+  const empty = (input) => input === '';
+  const values = [];
+  inputs.forEach(input => values.push(input.value));
+  if (values.some(empty)) {
+    return;
+  } else {
+    let newTripQuote = new Trip({
+      'userID': currentTraveler.id,
+      'destinationID': +(destinationDropdown.value),
+      'travelers': +(tripNumTravelers.value),
+      'date': tripDepartureDate.value.replaceAll('-', '/'),
+      'duration': +(tripDuration.value),
+      'status': 'pending',
+    }, allTrips);
+    modalTripQuote.innerText = `Departure: ${convertDateForDOM(newTripQuote.date)}
+    ${newTripQuote.duration} nights in ${newTripQuote.destinationDetails.destination}
+    with ${newTripQuote.travelers} guests
+    Total trip cost: $${newTripQuote.estimatedCost}`
+    tripConfirmModal.showModal();
+  };
+};
+
+function showThankYouMessage() {
+  tripRequestOptions.classList.add('hidden');
+  tripConfirmHeader.innerHTML = 'Thank you for booking with Travel Tracker!';
+  modalTripQuote.innerText = 'An agent will contact you shortly to confirm your trip.';
+};
+
+function closeModalClearInputs() {
+  tripConfirmModal.close();
+  inputs.forEach(input => {
+    input.value = '';
+  })
+  tripRequestOptions.classList.remove('hidden');
+  tripConfirmHeader.innerHTML = 'Request to book your trip';
+  modalTripQuote.innerText = '';
+}
+
 function convertDateForDOM(date) {
   let dateYear = +(date.slice(0, 4));
   let dateMonth = +(date.slice(5, 7));
@@ -147,18 +187,16 @@ function sortTripsForDisplay(trips) {
   return trips;
 };
 
-// Make a new modal and have the current article be a button to 
 function displayPastTripsTotal() {
   currentTraveler.calculateSpendInLastYear();
   let total = currentTraveler.amountSpentInLastYear;
   if (total > 0) {
-  pastTripTotal.innerText = `Thanks for booking $${total} in trips with us this year!`
+  pastTripTotal.innerText = `Thanks for booking $${total} worth of trips with us this year!`
   } else {
     pastTripTotal.innerText = `You haven't booked a trip in the last year.
-    Imagine where we could take you!`;
+    You deserve a vacation!`;
   }
 }
-
 
 function createDestinationOptions() {
   let sortedDest = allDestinations.sort((a, b) => a.destination < b.destination ? -1 : 1);
@@ -185,6 +223,7 @@ function submitTripRequest() {
     'duration': +(tripDuration.value),
     'status': 'pending',
   }, allTrips)
+  console.log('post newTrip', newTrip);
   let postData = {
   'id': newTrip.id, 
   'userID': newTrip.userID,
@@ -195,11 +234,17 @@ function submitTripRequest() {
   'status': newTrip.status,
   'suggestedActivities': newTrip.suggestedActivities
   };
+  console.log('post postData', postData)
   apicalls.postTripRequest(postData)
     .then(data => {
       console.log('Trip posted successfully', data);
-      currentTraveler.pendingTrips.push(new Trip (data.newTrip, allTrips))
-      displayTrips(currentTraveler.pendingTrips);
+      allTravelersPromise = apicalls.getAllTravelers();
+      singleTravelerPromise = apicalls.getSingleTraveler(currentTraveler.id);
+      allTripsPromise = apicalls.getAllTrips();
+      allDestinationsPromise = apicalls.getAllDestinations();
+      resolvePromises();
+      // currentTraveler.pendingTrips.push(new Trip(data.newTrip, allTrips))
+      // displayTrips(currentTraveler.pendingTrips);
     })
-    .catch('Your trip request failed to send to the server. Please try resubmitting your request.');
+    .catch((error) => alert('Error while submiting new trip request. Please reload the page and submit your request again.', error));
 };

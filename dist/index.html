@@ -30,11 +30,10 @@
           <input type="number" id="tripNumTravelers" name="travelers" min="1" placeholder="# of travelers" required>
           <button class="submit-buttons" id="quoteTripButton">Let's go!</button>
           <dialog id="tripConfirmModal">
-            <div class="trip-confirm-contents">
+            <div class="trip-confirm-contents" id="tripConfirmContents">
               <h2 id="tripConfirmHeader">Request to book your trip</h2>
-              <!-- Inject interpolated message here with estimated trip total -->
-              <p>Your trip is expensive, would you like to request to book?</p>
-              <div class="trip-request-options">
+              <p id="modalTripQuote"></p>
+              <div class="trip-request-options" id="tripRequestOptions">
                 <button class="submit-buttons trip-request-buttons" id="modalGoBack">Go back</button>
                 <button type="submit" class="submit-buttons trip-request-buttons" id="submitTripButton">Request to book!</button>
               </div>
