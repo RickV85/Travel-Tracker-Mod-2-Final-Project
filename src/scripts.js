@@ -17,7 +17,22 @@ let allDestinations;
 
 // Query selectors
 let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers');
-let xxx = document.getElementById('xxx');
+let destinationDropdown = document.getElementById('destinationDropdown');
+let quoteTripButton = document.getElementById('quoteTripButton');
+let modalGoBack = document.getElementById('modalGoBack');
+let tripConfirmModal = document.getElementById('tripConfirmModal');
+let submitTripButton = document.getElementById('submitTripButton');
+let userName = document.getElementById('userName');
+let pastTripsDisplay = document.getElementById('pastTripsDisplay');
+let pendingTripsDisplay = document.getElementById('pendingTripsDisplay');
+let upcomingTripsDisplay = document.getElementById('upcomingTripsDisplay');
+let modalTripQuote = document.getElementById('modalTripQuote');
+let tripRequestOptions = document.getElementById('tripRequestOptions');
+let tripConfirmHeader = document.getElementById('tripConfirmHeader');
+let pastTripTotal = document.getElementById('pastTripTotal');
+let tripDepartureDate = document.getElementById('tripDepartureDate');
+let tripNumTravelers = document.getElementById('tripNumTravelers');
+let tripDuration = document.getElementById('tripDuration');
 
 // Event listeners
 window.addEventListener('load', () => {
@@ -198,7 +213,7 @@ function displayPastTripsTotal() {
   currentTraveler.calculateSpendInLastYear();
   let total = currentTraveler.amountSpentInLastYear;
   if (total > 0) {
-  pastTripTotal.innerText = `Thanks for booking $${total} worth of trips with us this year!`
+    pastTripTotal.innerText = `Thanks for booking $${total} worth of trips with us this year!`
   } else {
     pastTripTotal.innerText = `You haven't booked a trip in the last year.
     You deserve a vacation!`;
