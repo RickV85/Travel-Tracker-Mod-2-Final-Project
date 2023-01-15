@@ -16,7 +16,23 @@ let allTrips;
 let allDestinations;
 
 // Query selectors
-let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers')
+let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers');
+let destinationDropdown = document.getElementById('destinationDropdown');
+let quoteTripButton = document.getElementById('quoteTripButton');
+let modalGoBack = document.getElementById('modalGoBack');
+let tripConfirmModal = document.getElementById('tripConfirmModal');
+let submitTripButton = document.getElementById('submitTripButton');
+let userName = document.getElementById('userName');
+let pastTripsDisplay = document.getElementById('pastTripsDisplay');
+let pendingTripsDisplay = document.getElementById('pendingTripsDisplay');
+let upcomingTripsDisplay = document.getElementById('upcomingTripsDisplay');
+let modalTripQuote = document.getElementById('modalTripQuote');
+let tripRequestOptions = document.getElementById('tripRequestOptions');
+let tripConfirmHeader = document.getElementById('tripConfirmHeader');
+let pastTripTotal = document.getElementById('pastTripTotal');
+let tripDepartureDate = document.getElementById('tripDepartureDate');
+let tripNumTravelers = document.getElementById('tripNumTravelers');
+let tripDuration = document.getElementById('tripDuration');
 
 // Event listeners
 window.addEventListener('load', () => {
@@ -25,6 +41,10 @@ window.addEventListener('load', () => {
   // function to send a param to resolve promises for a single user?
   singleTravelerPromise = apicalls.getSingleTraveler(3);
   resolvePromises();
+});
+
+destinationDropdown.addEventListener('focus', () => {
+  createDestinationOptions();
 })
 
 quoteTripButton.addEventListener('click', (event) => {
@@ -35,7 +55,7 @@ quoteTripButton.addEventListener('click', (event) => {
 modalGoBack.addEventListener('click', (event) => {
   event.preventDefault();
   tripConfirmModal.close();
-})
+});
 
 submitTripButton.addEventListener('click', (event) => {
   event.preventDefault();
@@ -79,7 +99,6 @@ function updateDOM() {
   displayTrips(currentTraveler.upcomingTrips);
   displayPastTripsTotal();
   setTodaysDateToMin();
-  createDestinationOptions();
 };
 
 function displayTrips(tripsToDisplay) {
@@ -91,7 +110,7 @@ function displayTrips(tripsToDisplay) {
       pastTripsDisplay.innerHTML += 
       `<article class="trip-tile">
         <p class="trip-tile-copy">
-          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
         </p>
       </article>`;
     });
@@ -102,7 +121,7 @@ function displayTrips(tripsToDisplay) {
       pendingTripsDisplay.innerHTML += 
       `<article class="trip-tile">
         <p class="trip-tile-copy">
-          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
         </p>
       </article>`;
     });
@@ -113,16 +132,13 @@ function displayTrips(tripsToDisplay) {
       upcomingTripsDisplay.innerHTML += 
       `<article class="trip-tile">
         <p class="trip-tile-copy">
-          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
         </p>
       </article>`;
     });
   };
 };
 
-  //Add func call here for a new func that creates a new Trip
-  // then injects a message in to the modal with trip.estimatedCost
-  // based on details entered
 function openModalEstimateTrip() {
   const empty = (input) => input === '';
   const values = [];
@@ -138,10 +154,12 @@ function openModalEstimateTrip() {
       'duration': +(tripDuration.value),
       'status': 'pending',
     }, allTrips);
-    modalTripQuote.innerText = `Departure: ${convertDateForDOM(newTripQuote.date)}
+    let tripQuoteCopy = `Departure: ${convertDateForDOM(newTripQuote.date)}
     ${newTripQuote.duration} nights in ${newTripQuote.destinationDetails.destination}
     with ${newTripQuote.travelers} guests
-    Total trip cost: $${newTripQuote.estimatedCost}`
+    Total trip cost: $${newTripQuote.estimatedCost}`;
+    modalTripQuote.innerText = tripQuoteCopy;
+    tripConfirmModal.setAttribute('aria-label', tripQuoteCopy)
     tripConfirmModal.showModal();
   };
 };
@@ -159,6 +177,7 @@ function closeModalClearInputs() {
   })
   tripRequestOptions.classList.remove('hidden');
   tripConfirmHeader.innerHTML = 'Request to book your trip';
+  destinationDropdown.innerHTML = '<option value="" disabled selected hidden>Where to?</option>';
   modalTripQuote.innerText = '';
 }
 
@@ -191,15 +210,17 @@ function displayPastTripsTotal() {
   currentTraveler.calculateSpendInLastYear();
   let total = currentTraveler.amountSpentInLastYear;
   if (total > 0) {
-  pastTripTotal.innerText = `Thanks for booking $${total} worth of trips with us this year!`
+    pastTripTotal.innerText = `Thanks for booking $${total} with us
+     in the last year!`
   } else {
     pastTripTotal.innerText = `You haven't booked a trip in the last year.
-    You deserve a vacation!`;
+      You deserve a vacation!`;
   }
 }
 
 function createDestinationOptions() {
   let sortedDest = allDestinations.sort((a, b) => a.destination < b.destination ? -1 : 1);
+  destinationDropdown.innerHTML = '';
   sortedDest.forEach(dest => {
     destinationDropdown.innerHTML += `<option value="${dest.id}">${dest.destination}</option>`;
   })
@@ -243,8 +264,6 @@ function submitTripRequest() {
       allTripsPromise = apicalls.getAllTrips();
       allDestinationsPromise = apicalls.getAllDestinations();
       resolvePromises();
-      // currentTraveler.pendingTrips.push(new Trip(data.newTrip, allTrips))
-      // displayTrips(currentTraveler.pendingTrips);
     })
     .catch((error) => alert('Error while submiting new trip request. Please reload the page and submit your request again.', error));
 };
