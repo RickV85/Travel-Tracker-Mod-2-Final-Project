@@ -139,9 +139,6 @@ function displayTrips(tripsToDisplay) {
   };
 };
 
-  //Add func call here for a new func that creates a new Trip
-  // then injects a message in to the modal with trip.estimatedCost
-  // based on details entered
 function openModalEstimateTrip() {
   const empty = (input) => input === '';
   const values = [];
@@ -213,10 +210,11 @@ function displayPastTripsTotal() {
   currentTraveler.calculateSpendInLastYear();
   let total = currentTraveler.amountSpentInLastYear;
   if (total > 0) {
-    pastTripTotal.innerText = `Thanks for booking $${total} worth of trips with us this year!`
+    pastTripTotal.innerText = `Thanks for booking $${total} with us
+     in the last year!`
   } else {
     pastTripTotal.innerText = `You haven't booked a trip in the last year.
-    You deserve a vacation!`;
+      You deserve a vacation!`;
   }
 }
 
