@@ -60,7 +60,7 @@ h2 {
 .trip-request-section {
   width: 95vw;
   background-color: #B0CDD3;
-  outline: 1px solid #086375;
+  box-shadow: 0px 0px 0 1px #086375;
   border-radius: 20px;
 }
 
@@ -103,10 +103,6 @@ h2 {
   text-align: center;
 }
 
-#modalTripQuote {
-  font-size: 16px;
-}
-
 .trip-request-options {
   width: 50vw;
   display: flex;
@@ -123,17 +119,18 @@ h2 {
   background: #00000049;
 }
 
-#destinationDropdown {
-  width: 20vw;
-}
-
 input, select {
   height: 7vh;
   border-width: 0px;
   border-radius: 10px;
-  outline: 1px solid #086375;
+  box-shadow: 0px 0px 0 1px #086375;
   padding-left: 10px;
+  font-family: 'Saira', sans-serif;
   font-size: 16px;
+}
+
+input::placeholder {
+  color: #000000;
 }
 
 #destinationDropdown {
@@ -168,7 +165,7 @@ input, select {
   font-family: 'Saira', sans-serif;
   font-weight: 700;
   font-size: 20px;
-  outline: 2px solid #AFFC41;
+  box-shadow: 0px 0px 0 2px #AFFC41;
   border-radius: 10px;
 }
 
@@ -187,7 +184,7 @@ input, select {
   align-items: center;
   justify-content: flex-start;
   background-color: #B0CDD3;
-  outline: 1px solid #086375;
+  box-shadow: 0px 0px 0 1px #086375;
   border-radius: 20px;
   overflow-y: scroll;
   overflow-wrap: normal;
@@ -203,14 +200,14 @@ input, select {
   height: 16vh;
   width: 24vw;
   background-color: white;
-  outline: 1px solid #086375;
+  box-shadow: 0px 0px 0 1px #086375;
   border-radius: 10px;
   margin-bottom: 2vh;
   overflow-y: scroll;
 }
 
 .trip-tile-copy {
-  font-size: 14px;
+  font-size: 18px;
   padding-left: 7px;
   padding-top: 4px;
 }
@@ -222,21 +219,21 @@ input, select {
   font-weight: 600;
   background-color: white;
   border-radius: 10px;
-  outline: 1px solid #086375;
+  box-shadow: 0px 0px 0 1px #086375;
   margin-bottom: 2vh;
   padding: 4px;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 /* Hover and focus states for a11y */
 
 input:focus-visible, input:hover, 
 select:focus-visible, select:hover {
-  outline: 3px solid #1DD3B0;
+  box-shadow: 0px 0px 0 3px #1DD3B0;
 }
 
 button:focus-visible, button:hover {
-  outline: 5px solid #1dd3ae83;
+  box-shadow: 0px 0px 0 5px #1dd3ae83;
 }
 
 .hidden {
