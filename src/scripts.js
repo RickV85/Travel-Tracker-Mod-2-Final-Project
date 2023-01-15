@@ -16,7 +16,8 @@ let allTrips;
 let allDestinations;
 
 // Query selectors
-let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers')
+let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers');
+let xxx = document.getElementById('xxx');
 
 // Event listeners
 window.addEventListener('load', () => {
@@ -25,6 +26,10 @@ window.addEventListener('load', () => {
   // function to send a param to resolve promises for a single user?
   singleTravelerPromise = apicalls.getSingleTraveler(3);
   resolvePromises();
+});
+
+destinationDropdown.addEventListener('focus', () => {
+  createDestinationOptions();
 })
 
 quoteTripButton.addEventListener('click', (event) => {
@@ -35,7 +40,7 @@ quoteTripButton.addEventListener('click', (event) => {
 modalGoBack.addEventListener('click', (event) => {
   event.preventDefault();
   tripConfirmModal.close();
-})
+});
 
 submitTripButton.addEventListener('click', (event) => {
   event.preventDefault();
@@ -79,7 +84,6 @@ function updateDOM() {
   displayTrips(currentTraveler.upcomingTrips);
   displayPastTripsTotal();
   setTodaysDateToMin();
-  createDestinationOptions();
 };
 
 function displayTrips(tripsToDisplay) {
@@ -138,10 +142,12 @@ function openModalEstimateTrip() {
       'duration': +(tripDuration.value),
       'status': 'pending',
     }, allTrips);
-    modalTripQuote.innerText = `Departure: ${convertDateForDOM(newTripQuote.date)}
+    let tripQuoteCopy = `Departure: ${convertDateForDOM(newTripQuote.date)}
     ${newTripQuote.duration} nights in ${newTripQuote.destinationDetails.destination}
     with ${newTripQuote.travelers} guests
-    Total trip cost: $${newTripQuote.estimatedCost}`
+    Total trip cost: $${newTripQuote.estimatedCost}`;
+    modalTripQuote.innerText = tripQuoteCopy;
+    tripConfirmModal.setAttribute('aria-label', tripQuoteCopy)
     tripConfirmModal.showModal();
   };
 };
@@ -159,6 +165,7 @@ function closeModalClearInputs() {
   })
   tripRequestOptions.classList.remove('hidden');
   tripConfirmHeader.innerHTML = 'Request to book your trip';
+  destinationDropdown.innerHTML = '<option value="" disabled selected hidden>Where to?</option>';
   modalTripQuote.innerText = '';
 }
 
@@ -200,6 +207,7 @@ function displayPastTripsTotal() {
 
 function createDestinationOptions() {
   let sortedDest = allDestinations.sort((a, b) => a.destination < b.destination ? -1 : 1);
+  destinationDropdown.innerHTML = '';
   sortedDest.forEach(dest => {
     destinationDropdown.innerHTML += `<option value="${dest.id}">${dest.destination}</option>`;
   })
@@ -243,8 +251,6 @@ function submitTripRequest() {
       allTripsPromise = apicalls.getAllTrips();
       allDestinationsPromise = apicalls.getAllDestinations();
       resolvePromises();
-      // currentTraveler.pendingTrips.push(new Trip(data.newTrip, allTrips))
-      // displayTrips(currentTraveler.pendingTrips);
     })
     .catch((error) => alert('Error while submiting new trip request. Please reload the page and submit your request again.', error));
 };
