@@ -1,9 +1,14 @@
+/* Universal and user dashboard styles */
 *,
 *:after,
 *:before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+.hidden {
+  display: none;
 }
 
 body {
@@ -48,9 +53,12 @@ h2 {
 }
 
 .main-display {
+  background-color: white;
+}
+
+.user-dashboard {
   height: 90vh;
   width: 100vw;
-  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -229,13 +237,61 @@ input::placeholder {
 
 input:focus-visible, input:hover, 
 select:focus-visible, select:hover {
-  box-shadow: 0px 0px 0 3px #1DD3B0;
+  box-shadow: 0px 0px 0 4px #1DD3B0;
 }
 
 button:focus-visible, button:hover {
   box-shadow: 0px 0px 0 5px #1dd3ae83;
 }
 
-.hidden {
-  display: none;
+/* Log-in page styles */
+
+.login-page {
+  height: 90vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 55vh;
+  width: 60vw;
+  background-color: #B0CDD3;
+  border-radius: 20px;
+  box-shadow: 0px 0px 0 1px #086375;
+}
+
+.login-user-name, .login-password {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#loginTitle {
+  font-size: 28px;
+}
+
+.login-labels {
+  color: #3C1642;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.login-inputs {
+  width: 25vw;
+}
+
+#loginForgotCreds {
+  font-size: 14px;
+  color: #086375;
+  text-decoration: underline;
+}
+
+#loginConfirmButton {
+  width: 12vw;
 }

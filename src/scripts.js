@@ -49,6 +49,9 @@ destinationDropdown.addEventListener('focus', () => {
 
 quoteTripButton.addEventListener('click', (event) => {
   event.preventDefault();
+  // Conditional to check values and use modal to tell user
+  // to make sure to fill out all fields for a quote
+  // Could I use the below function?
   openModalEstimateTrip();
 });
 

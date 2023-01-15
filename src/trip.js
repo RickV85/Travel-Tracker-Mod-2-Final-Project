@@ -14,7 +14,7 @@ class Trip {
     this.estimatedCost = this.calculateCost();
   }
 
-  calculateCost(){
+  calculateCost() {
     let tripDestination = destinations.find(dest => dest.id === this.destinationID);
     let tripLodgingCost = this.duration * tripDestination.estimatedLodgingCostPerDay;
     let tripAirfareCost = this.travelers * tripDestination.estimatedFlightCostPerPerson;
