@@ -110,7 +110,7 @@ function displayTrips(tripsToDisplay) {
       pastTripsDisplay.innerHTML += 
       `<article class="trip-tile">
         <p class="trip-tile-copy">
-          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
         </p>
       </article>`;
     });
@@ -121,7 +121,7 @@ function displayTrips(tripsToDisplay) {
       pendingTripsDisplay.innerHTML += 
       `<article class="trip-tile">
         <p class="trip-tile-copy">
-          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
         </p>
       </article>`;
     });
@@ -132,7 +132,7 @@ function displayTrips(tripsToDisplay) {
       upcomingTripsDisplay.innerHTML += 
       `<article class="trip-tile">
         <p class="trip-tile-copy">
-          ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
         </p>
       </article>`;
     });
