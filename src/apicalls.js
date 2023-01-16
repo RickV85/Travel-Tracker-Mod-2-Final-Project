@@ -1,3 +1,5 @@
+import scripts from './scripts';
+
 let allTravelers;
 let singleTraveler;
 let allTrips;
@@ -34,9 +36,10 @@ function getSingleTraveler(id) {
       singleTraveler = data;
       return singleTraveler;
     })
-    // .catch((error) => {
-    //   alert('Error while fetching traveler information. Please try reloading the page.', error);
-    // });
+    .catch((error) => {
+      scripts.showErrorModal('loginNetworkError', error);
+      return;
+    });
 };
 
 function getAllTrips() {

@@ -1,6 +1,6 @@
 // Imports
 import './css/styles.css';
-import apicalls from './apiCalls';
+import apicalls from './apicalls';
 import Traveler from './traveler';
 import Trip from './trip';
 
@@ -41,6 +41,8 @@ let userProfileDisplay = document.getElementById('userProfileDisplay');
 let loginConfirmButton = document.getElementById('loginConfirmButton');
 let loginUserNameInput = document.getElementById('loginUserNameInput');
 let loginPassword = document.getElementById('loginPassword');
+let loginErrorModal = document.getElementById('loginErrorModal');
+let loginErrorMessage = document.getElementById('loginErrorMessage');
 
 // Event listeners
 window.addEventListener('load', () => {
@@ -101,17 +103,11 @@ function logUserIn() {
   let enteredPassword = loginPassword.value;
   let loginUserID = +(loginUserNameInput.value.split('traveler')[1]);
   
-  if (!(enteredPassword === 'travel') || !(enteredName.startsWith('traveler'))) {
-    // Function to display "Incorrect username or password" modal
-    alert('User name doesnt start with traverler or password is not travel')
-    return;
-  } else if (loginUserID > allTravelers.length) {
-    // Function to display "Incorrect username or password" modal
-    alert('UserID value greater than allTravelers')
+  if (!(enteredPassword === 'travel') || !(enteredName.startsWith('traveler')) || loginUserID > allTravelers.length) {
+    showErrorModal('badCredentials');
     return;
   }
-  loginPage.classList.add('hidden');
-  userDashboard.classList.remove('hidden');
+
   singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
   Promise.resolve(singleTravelerPromise)
     .then((data) => {
@@ -124,7 +120,26 @@ function logUserIn() {
       updateDOM();
       console.log('currentTraveler', currentTraveler)
     })
-    .catch((error) => alert('An error occoured while logging in. Please reload the page and try again.', error))
+};
+
+function showErrorModal(errorType, error) {
+  if (errorType === 'badCredentials') {
+  loginErrorModal.showModal();
+  setTimeout(() => {
+    loginErrorModal.close();
+    loginUserNameInput.value = '';
+    loginPassword.value = '';
+  }, 3500)
+  } else if (errorType === 'loginNetworkError') {
+    loginErrorMessage.innerHTML = `Please try logging in again.<br>${error}`
+    loginErrorModal.showModal();
+    setTimeout(() => {
+      loginErrorModal.close();
+      loginUserNameInput.value = '';
+      loginPassword.value = '';
+      loginErrorMessage.innerHTML = `Your username and password did not match.<br>Please check your credentials and try again.`
+    }, 3500)
+  } 
 };
 
 function addAllTravelerTrips() {
@@ -310,3 +325,5 @@ function submitTripRequest() {
     })
     .catch((error) => alert('Error while submiting new trip request. Please reload the page and submit your request again.', error));
 };
+
+export default { showErrorModal };

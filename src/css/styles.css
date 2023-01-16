@@ -90,14 +90,14 @@ h2 {
   align-items: center;
 }
 
-#tripConfirmModal {
+.modals {
   height: 25vw;
   width: 50vw;
   margin: 50vh auto 0;
   transform: translateY(-50%);
 }
 
-.trip-confirm-contents {
+.modal-content {
   height: 25vw;
   width: 50vw;
   display: flex;
