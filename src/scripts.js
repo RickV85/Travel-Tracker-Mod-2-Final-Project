@@ -14,6 +14,7 @@ let allDestinationsPromise = apicalls.getAllDestinations();
 let currentTraveler;
 let allTrips;
 let allDestinations;
+let allTravelers;
 
 // Query selectors
 let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers');
@@ -33,15 +34,27 @@ let pastTripTotal = document.getElementById('pastTripTotal');
 let tripDepartureDate = document.getElementById('tripDepartureDate');
 let tripNumTravelers = document.getElementById('tripNumTravelers');
 let tripDuration = document.getElementById('tripDuration');
+let loginPage = document.getElementById('loginPage');
+let userDashboard = document.getElementById('userDashboard');
+let loginConfirmButton = document.getElementById('loginConfirmButton');
+let loginUserNameInput = document.getElementById('loginUserNameInput');
+let loginPassword = document.getElementById('loginPassword');
 
 // Event listeners
 window.addEventListener('load', () => {
   // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
   // Will likely need to move this to a submit event listener and remove from here
   // function to send a param to resolve promises for a single user?
-  singleTravelerPromise = apicalls.getSingleTraveler(3);
+
+  // singleTravelerPromise = apicalls.getSingleTraveler(3);
   resolvePromises();
+  setTodaysDateToMin();
 });
+
+loginConfirmButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  logUserIn();
+})
 
 destinationDropdown.addEventListener('focus', () => {
   createDestinationOptions();
@@ -67,33 +80,58 @@ submitTripButton.addEventListener('click', (event) => {
   setTimeout(() => {
     closeModalClearInputs();
   }, 3000);
-})
+});
 
 // Functions
+
+// This gets all available data but likely will want to make a
+// user login version and an agent login version so as not to 
+// pull more data than I need. submitTripRequest is calling
+// all data and would need to change to user only promise.all
 function resolvePromises() {
-  Promise.all([allTravelersPromise, singleTravelerPromise, allTripsPromise, allDestinationsPromise])
+  Promise.all([allTravelersPromise, allTripsPromise, allDestinationsPromise])
     .then(data => {
-      currentTraveler = data[1];
-      allTrips = data[2].trips;
-      allDestinations = data[3].destinations;
-      currentTraveler = new Traveler(currentTraveler);
+      allTravelers = data[0].travelers;
+      // currentTraveler = data[1];
+      allTrips = data[1].trips;
+      allDestinations = data[2].destinations;
+      // currentTraveler = new Traveler(currentTraveler);
       //Could make a helper for these if I call them more
+    })
+};
+
+// Add id parameter after log in is created to make this dynamic
+function logUserIn() {
+  let enteredName = loginUserNameInput.value;
+  let enteredPassword = loginPassword.value;
+  let loginUserID = +(loginUserNameInput.value.split('traveler')[1]);
+  
+  if (!(enteredPassword === 'travel') || !(enteredName.startsWith('traveler'))) {
+    // Function to display "Incorrect username or password" modal
+    alert('User name doesnt start with traverler or password is not travel')
+    return;
+  } else if (loginUserID > allTravelers.length) {
+    // Function to display "Incorrect username or password" modal
+    alert('UserID value greater than allTravelers')
+    return;
+  }
+  loginPage.classList.add('hidden');
+  userDashboard.classList.remove('hidden');
+  singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
+  Promise.all([singleTravelerPromise])
+    .then(data => {
+      console.log(data)
+      currentTraveler = data[0];
+      currentTraveler = new Traveler(currentTraveler);
       currentTraveler.addPastTrips(allTrips);
       currentTraveler.addPendingTrips(allTrips);
       currentTraveler.addUpcomingTrips(allTrips);
+      loginPage.classList.add('hidden');
+      userDashboard.classList.remove('hidden');
       updateDOM();
-      console.log('allTrips', allTrips)
-      console.log(currentTraveler);
+      console.log('currentTraveler', currentTraveler)
     })
 }
-
-// Add id parameter after log in is created to make this dynamic
-// function instatiateCurrentTraveler() {
-//   currentTraveler = new Traveler(currentTraveler);
-//   // currentTraveler.addPastTrips(allTrips);
-//   // currentTraveler.displayPastTripsTotal();
-//   console.log('currentTraveler', currentTraveler)
-// }
 
 function updateDOM() {
   userName.innerText = currentTraveler.name;
@@ -101,7 +139,6 @@ function updateDOM() {
   displayTrips(currentTraveler.pendingTrips);
   displayTrips(currentTraveler.upcomingTrips);
   displayPastTripsTotal();
-  setTodaysDateToMin();
 };
 
 function displayTrips(tripsToDisplay) {
