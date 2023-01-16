@@ -69,9 +69,6 @@ destinationDropdown.addEventListener('focus', () => {
 
 quoteTripButton.addEventListener('click', (event) => {
   event.preventDefault();
-  // Conditional to check values and use modal to tell user
-  // to make sure to fill out all fields for a quote
-  // Could I use the below function?
   openModalEstimateTrip();
 });
 
@@ -143,10 +140,10 @@ function showErrorModal(errorType, error) {
     openErrorModalReset();
   } else if (errorType === 'newTripPostError') {
     userDashErrorMessage.innerHTML = `A server error occoured while submitting your trip.<br>Please try to resubmit your trip request.<br>${error}`;
-    userDashErrorModal.showModal();
-    setTimeout(() => {
-      userDashErrorModal.close();
-    }, 3500)
+    openUserDashModalReset();
+  } else if (errorType === 'missingRequiredInputValues') {
+    userDashErrorMessage.innerHTML = `Please fill out all fields in trip request form.<br>Also, please do not enter 0 in any field.`;
+    openUserDashModalReset();
   }
 };
 
@@ -157,6 +154,14 @@ function openErrorModalReset() {
     loginUserNameInput.value = '';
     loginPassword.value = '';
     loginErrorMessage.innerHTML = `Your username and password did not match.<br>Please check your credentials and try again.`
+  }, 3500)
+};
+
+function openUserDashModalReset() {
+  userDashErrorModal.showModal();
+  setTimeout(() => {
+    userDashErrorModal.close();
+    userDashErrorMessage.innerHTML = '';
   }, 3500)
 }
 
@@ -214,9 +219,11 @@ function displayTrips(tripsToDisplay) {
 
 function openModalEstimateTrip() {
   const empty = (input) => input === '';
+  const zero = (input) => input === '0';
   const values = [];
   inputs.forEach(input => values.push(input.value));
-  if (values.some(empty)) {
+  if (values.some(empty) || values.some(zero)) {
+    showErrorModal('missingRequiredInputValues');
     return;
   } else {
     let newTripQuote = new Trip({
@@ -234,7 +241,6 @@ function openModalEstimateTrip() {
     modalTripQuote.innerText = tripQuoteCopy;
     tripConfirmModal.setAttribute('aria-label', tripQuoteCopy)
     tripConfirmModal.showModal();
-    // ADD EVENT LISTENER FOR CLICKING OUTSIDE OF MODAL
   };
 };
 
