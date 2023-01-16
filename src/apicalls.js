@@ -19,9 +19,6 @@ function getAllTravelers() {
       allTravelers = data;
       return allTravelers;
     })
-    // .catch((error) => {
-    //   alert('Error while fetching all travelers. Please try reloading the page.', error);
-    // });
 };
 
 function getSingleTraveler(id) {
@@ -38,7 +35,6 @@ function getSingleTraveler(id) {
     })
     .catch((error) => {
       scripts.showErrorModal('loginNetworkError', error);
-      return;
     });
 };
 
@@ -54,9 +50,6 @@ function getAllTrips() {
       allTrips = data;
       return allTrips;
     })
-    // .catch((error) => {
-    //   alert('Error while fetching trips. Please try reloading the page.', error);
-    // });
 };
 
 function getAllDestinations() {
@@ -71,12 +64,9 @@ function getAllDestinations() {
       allDestinations = data;
       return allDestinations;
     })
-    // .catch((error) => {
-    //   alert('Error while fetching destinations. Please try reloading the page.', error)
-    // });
 };
 
-// Post request
+// Post requests
 
 function postTripRequest(postData) {
   return fetch(`http://localhost:3001/api/v1/trips`, {
@@ -86,7 +76,6 @@ function postTripRequest(postData) {
   })
   .then(response => {
     if (response.ok) {
-      
       return response.json();
     }
     throw new Promise.reject(error);

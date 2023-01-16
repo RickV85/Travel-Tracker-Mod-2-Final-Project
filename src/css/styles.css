@@ -94,7 +94,11 @@ h2 {
   height: 25vw;
   width: 50vw;
   margin: 50vh auto 0;
-  transform: translateY(-50%);
+  transform: translateY(-40%);
+}
+
+.modals::backdrop {
+  background: #00000049;
 }
 
 .modal-content {
@@ -117,10 +121,6 @@ h2 {
 .trip-request-buttons {
   width: 20vw;
   margin: 2vw;
-}
-
-#tripConfirmModal::backdrop {
-  background: #00000049;
 }
 
 input, select {

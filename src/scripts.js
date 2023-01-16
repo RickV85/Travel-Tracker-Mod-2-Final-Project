@@ -43,6 +43,9 @@ let loginUserNameInput = document.getElementById('loginUserNameInput');
 let loginPassword = document.getElementById('loginPassword');
 let loginErrorModal = document.getElementById('loginErrorModal');
 let loginErrorMessage = document.getElementById('loginErrorMessage');
+let userDashErrorModal = document.getElementById('userDashErrorModal');
+let userDashErrorMessage = document.getElementById('userDashErrorMessage');
+
 
 // Event listeners
 window.addEventListener('load', () => {
@@ -75,10 +78,6 @@ modalGoBack.addEventListener('click', (event) => {
 submitTripButton.addEventListener('click', (event) => {
   event.preventDefault();
   submitTripRequest();
-  showThankYouMessage();
-  setTimeout(() => {
-    closeModalClearInputs();
-  }, 3000);
 });
 
 // Functions
@@ -94,7 +93,7 @@ function resolvePromisesPageLoad() {
       allTrips = data[1].trips;
       allDestinations = data[2].destinations;
     })
-    .catch((error) => alert('An error occoured while loading. Please refresh the page.', error))
+    .catch((error) => showErrorModal('resolvePageLoadError', error))
 };
 
 // Add id parameter after log in is created to make this dynamic
@@ -124,23 +123,31 @@ function logUserIn() {
 
 function showErrorModal(errorType, error) {
   if (errorType === 'badCredentials') {
+  openErrorModalReset();
+  } else if (errorType === 'loginNetworkError') {
+    loginErrorMessage.innerHTML = `Please try logging in again.<br>${error}`;
+    openErrorModalReset();
+  } else if (errorType === 'resolvePageLoadError') {
+    loginErrorMessage.innerHTML = `A server error occoured on page load.<br>Please try reloading the page.<br>${error}`;
+    openErrorModalReset();
+  } else if (errorType === 'newTripPostError') {
+    userDashErrorMessage.innerHTML = `A server error occoured while submitting your trip.<br>Please try to resubmit your trip request.<br>${error}`;
+    userDashErrorModal.showModal();
+    setTimeout(() => {
+      userDashErrorModal.close();
+    }, 3500)
+  }
+};
+
+function openErrorModalReset() {
   loginErrorModal.showModal();
   setTimeout(() => {
     loginErrorModal.close();
     loginUserNameInput.value = '';
     loginPassword.value = '';
+    loginErrorMessage.innerHTML = `Your username and password did not match.<br>Please check your credentials and try again.`
   }, 3500)
-  } else if (errorType === 'loginNetworkError') {
-    loginErrorMessage.innerHTML = `Please try logging in again.<br>${error}`
-    loginErrorModal.showModal();
-    setTimeout(() => {
-      loginErrorModal.close();
-      loginUserNameInput.value = '';
-      loginPassword.value = '';
-      loginErrorMessage.innerHTML = `Your username and password did not match.<br>Please check your credentials and try again.`
-    }, 3500)
-  } 
-};
+}
 
 function addAllTravelerTrips() {
   currentTraveler.addPastTrips(allTrips);
@@ -301,29 +308,35 @@ function submitTripRequest() {
     'status': 'pending',
   }, allTrips)
   let postData = {
-  'id': newTrip.id, 
-  'userID': newTrip.userID,
-  'destinationID': newTrip.destinationID,
-  'travelers': newTrip.travelers,
-  'date': newTrip.date,
-  'duration': newTrip.duration,
-  'status': newTrip.status,
-  'suggestedActivities': newTrip.suggestedActivities
-  };
+    'id': newTrip.id, 
+    'userID': newTrip.userID,
+    'destinationID': newTrip.destinationID,
+    'travelers': newTrip.travelers,
+    'date': newTrip.date,
+    'duration': newTrip.duration,
+    'status': newTrip.status,
+    'suggestedActivities': newTrip.suggestedActivities
+    };
   postTripPromise = apicalls.postTripRequest(postData);
   Promise.resolve(postTripPromise)
     .then((data) => {
-      console.log('Trip posted successfully', data);
-      allTripsPromise = apicalls.getAllTrips();
-      Promise.resolve(allTripsPromise)
-        .then((data) => {
-          allTrips = data.trips;
-          console.log('allTrips after post', allTrips)
-          addAllTravelerTrips();
-          updateDOM();
-        })
+      if (data) {
+        allTripsPromise = apicalls.getAllTrips();
+        Promise.resolve(allTripsPromise)
+          .then((data) => {
+            allTrips = data.trips;
+            addAllTravelerTrips();
+            updateDOM();
+            showThankYouMessage();
+            setTimeout(() => {
+              closeModalClearInputs();
+            }, 3000);
+          })
+      } 
     })
-    .catch((error) => alert('Error while submiting new trip request. Please reload the page and submit your request again.', error));
+    .catch((error) => {
+      showErrorModal('newTripPostError', error);
+    });
 };
 
 export default { showErrorModal };
