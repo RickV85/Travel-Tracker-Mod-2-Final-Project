@@ -56,11 +56,16 @@ window.addEventListener('load', () => {
 loginConfirmButton.addEventListener('click', (event) => {
   event.preventDefault();
   logUserIn();
-})
+});
+
+loginPage.addEventListener('click', (event) => {
+  event.preventDefault();
+  showForgotCreds(event);
+});
 
 destinationDropdown.addEventListener('focus', () => {
   createDestinationOptions();
-})
+});
 
 quoteTripButton.addEventListener('click', (event) => {
   event.preventDefault();
@@ -75,15 +80,16 @@ modalGoBack.addEventListener('click', (event) => {
   tripConfirmModal.close();
 });
 
+tripConfirmModal.addEventListener('click', (event) => {
+  if (event.target === tripConfirmModal) {
+    tripConfirmModal.close();
+  }
+});
+
 submitTripButton.addEventListener('click', (event) => {
   event.preventDefault();
   submitTripRequest();
 });
-
-loginPage.addEventListener('click', (event) => {
-  event.preventDefault();
-  showForgotCreds(event);
-})
 
 // Functions
 
