@@ -1,3 +1,5 @@
+import scripts from './scripts';
+
 let allTravelers;
 let singleTraveler;
 let allTrips;
@@ -17,16 +19,13 @@ function getAllTravelers() {
       allTravelers = data;
       return allTravelers;
     })
-    .catch((error) => {
-      alert('Error while fetching all travelers. Please try reloading the page.', error);
-    });
 };
 
 function getSingleTraveler(id) {
   return fetch(`http://localhost:3001/api/v1/travelers/${id}`)
     .then((response) => {
       if (response.ok) {
-        return response.json()
+        return response.json();
       }
       throw Promise.reject(error);
     })
@@ -35,7 +34,7 @@ function getSingleTraveler(id) {
       return singleTraveler;
     })
     .catch((error) => {
-      alert('Error while fetching traveler information. Please try reloading the page.', error);
+      scripts.showErrorModal('loginNetworkError', error);
     });
 };
 
@@ -43,7 +42,7 @@ function getAllTrips() {
   return fetch('http://localhost:3001/api/v1/trips')
     .then((response) => {
       if (response.ok) {
-        return response.json()
+        return response.json();
       }
       throw Promise.reject(error);
     })
@@ -51,16 +50,13 @@ function getAllTrips() {
       allTrips = data;
       return allTrips;
     })
-    .catch((error) => {
-      alert('Error while fetching trips. Please try reloading the page.', error);
-    });
 };
 
 function getAllDestinations() {
   return fetch('http://localhost:3001/api/v1/destinations')
     .then((response) => {
       if (response.ok) {
-        return response.json()
+        return response.json();
       }
       throw new Promise.reject(error)
     })
@@ -68,24 +64,22 @@ function getAllDestinations() {
       allDestinations = data;
       return allDestinations;
     })
-    .catch((error) => {
-      alert('Error while fetching destinations. Please try reloading the page.', error)
-    });
 };
 
+// Post requests
+
 function postTripRequest(postData) {
-  let promise = fetch(`http://localhost:3001/api/v1/trips`, {
+  return fetch(`http://localhost:3001/api/v1/trips`, {
     method: 'POST',
     body: JSON.stringify(postData),
     headers: { "Content-Type": "application/json" }
   })
   .then(response => {
-    if (!response.ok) {
-      throw new Promise.reject(error)
+    if (response.ok) {
+      return response.json();
     }
-    return response.json();
+    throw new Promise.reject(error);
   })
-  return promise;
 };
 
 export default { getAllTravelers, getSingleTraveler, getAllTrips, getAllDestinations, postTripRequest };

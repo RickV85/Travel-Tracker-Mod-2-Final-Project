@@ -10,51 +10,83 @@
 <body>
   <header class="header" id="header">
     <h1 class="site-title">Travel Tracker</h1>
-    <div class="header-user-profile">
+    <div class="header-user-profile hidden" id="userProfileDisplay">
       <p id="userName"></p>
       <img id="userIcon" alt="user profile icon" src="https://img.icons8.com/external-gradak-royyan-wijaya/24/000000/B2FF9E/external-circle-gradak-user-gradak-royyan-wijaya.png"/>  
     </div>
   </header>
   <main class="main-display" id="mainDisplay">
-    <section class="trip-request-section">
-      <section class="trip-request-section-top">
-        <h2 id="tripRequestTitle">Let's book a trip!</h2>
-      </section>
-      <section class="trip-request-section-bottom">
-        <form class="trip-request-form" id="tripRequestForm" aria-label="To book a trip, please enter the following data">
-          <select id="destinationDropdown" name="destination" aria-label="Select your destination" required>
-            <option value="" disabled selected hidden>Where to?</option>
-          </select>
-          <input type="date" id="tripDepartureDate" name="departure_date" min="" aria-label="Enter desired departure date" placeholder="Departure date?" required>
-          <input type="number" id="tripDuration" name="duration" min="1"  aria-label="Enter your desired number of nights" placeholder="How many nights?" required>
-          <input type="number" id="tripNumTravelers" name="travelers" min="1"  aria-label="Enter your desired number of guests" placeholder="How many guests?" required>
-          <button class="submit-buttons" id="quoteTripButton" aria-label="Select to quote your trip" >Let's go!</button>
-          <dialog id="tripConfirmModal">
-            <div class="trip-confirm-contents" id="tripConfirmContents">
-              <h2 id="tripConfirmHeader">Request to book your trip</h2>
-              <p class="trip-tile-copy" id="modalTripQuote"></p>
-              <div class="trip-request-options" id="tripRequestOptions">
-                <button class="submit-buttons trip-request-buttons" id="modalGoBack">Go back</button>
-                <button class="submit-buttons trip-request-buttons" id="submitTripButton">Request to book!</button>
-              </div>
-            </div>
-          </dialog>
-        </form>
-      </section>
+    <!-- LOGIN PAGE -->
+    <section class="login-page" id="loginPage">
+      <form class="login-form" id="loginForm">
+        <h2 id="loginTitle">Welcome to Travel Tracker</h2>
+        <p>Please enter your credentials below to log in to your account</p>
+        <div class="login-user-name">
+          <label class="login-labels" for="loginUserNameInput">User name</label>
+          <input type="text" class="login-inputs" id="loginUserNameInput" required>
+        </div>
+        <div class="login-password">
+          <label class="login-labels" for="loginPassword">Password</label>
+          <input type="password" class="login-inputs" id="loginPassword" required>
+        </div>
+        <p id="loginForgotCreds">Forgot your user name or password?</p>
+        <button class="submit-buttons" id="loginConfirmButton">Log in</button>
+      </form>
+      <dialog class="modals" id="loginErrorModal">
+        <div class="modal-content" id="loginErrorContents">
+          <h2>Uh, oh! We can't log you in.</h2>
+          <p id="loginErrorMessage">Your username and password did not match.<br>Please check your credentials and try again.</p>
+        </div>
+      </dialog>
     </section>
-    <section class="trip-display">
-      <section class="trip-sections" id="pastTripsSection">
-        <h2 class="trip-headings" id="pastTripsHeading">Your Past Trips</h2>
-        <article class="past-trip-total" id="pastTripTotal"></article>
-        <section id="pastTripsDisplay"></section>
+    <!-- USER DASHBOARD -->
+    <section class="user-dashboard hidden" id="userDashboard">
+      <dialog class="modals" id="userDashErrorModal">
+        <div class="modal-content" id="dashErrorContents">
+          <h2>Uh, oh! An error occoured.</h2>
+          <p id="userDashErrorMessage"></p>
+        </div>
+      </dialog>
+      <section class="trip-request-section">
+        <section class="trip-request-section-top">
+          <h2 id="tripRequestTitle">Let's book a trip!</h2>
+        </section>
+        <section class="trip-request-section-bottom">
+          <form class="trip-request-form" id="tripRequestForm" aria-label="To book a trip, please enter the following data">
+            <select id="destinationDropdown" name="destination" aria-label="Select your destination" required>
+              <option value="" disabled selected hidden>Where to?</option>
+            </select>
+            <input type="date" id="tripDepartureDate" name="departure_date" min="" aria-label="Enter desired departure date" placeholder="Departure date?" required>
+            <input type="number" id="tripDuration" name="duration" min="1"  aria-label="Enter your desired number of nights" placeholder="How many nights?" required>
+            <input type="number" id="tripNumTravelers" name="travelers" min="1"  aria-label="Enter your desired number of guests" placeholder="How many guests?" required>
+            <button class="submit-buttons" id="quoteTripButton" aria-label="Click to quote your trip" >Let's go!</button>
+            <dialog class="modals" id="tripConfirmModal">
+              <div class="modal-content" id="tripConfirmContents">
+                <h2 id="tripConfirmHeader">Request to book your trip</h2>
+                <p class="trip-tile-copy" id="modalTripQuote"></p>
+                <div class="trip-request-options" id="tripRequestOptions">
+                  <button class="submit-buttons trip-request-buttons" id="modalGoBack">Go back</button>
+                  <button class="submit-buttons trip-request-buttons" id="submitTripButton">Request to book!</button>
+                </div>
+              </div>
+            </dialog>
+          </form>
+        </section>
       </section>
-      <section class="trip-sections" id="pendingTripsSection">
-        <h2 class="trip-headings" id="pendingTripsHeading">Your Pending Trips</h2>
-        <section id="pendingTripsDisplay"></section>
-      </section>
-      <section class="trip-sections" id="upcomingTripsSection">
-        <h2 class="trip-headings" id="upcomingTripsHeading">Your Upcoming Trips</h2>
-        <section id="upcomingTripsDisplay"></section>
+      <section class="trip-display">
+        <section class="trip-sections" id="pastTripsSection">
+          <h2 class="trip-headings" id="pastTripsHeading">Your Past Trips</h2>
+          <article class="past-trip-total" id="pastTripTotal"></article>
+          <section id="pastTripsDisplay"></section>
+        </section>
+        <section class="trip-sections" id="pendingTripsSection">
+          <h2 class="trip-headings" id="pendingTripsHeading">Your Pending Trips</h2>
+          <section id="pendingTripsDisplay"></section>
+        </section>
+        <section class="trip-sections" id="upcomingTripsSection">
+          <h2 class="trip-headings" id="upcomingTripsHeading">Your Upcoming Trips</h2>
+          <section id="upcomingTripsDisplay"></section>
+        </section>
       </section>
     </section>
   </main>
