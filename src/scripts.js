@@ -80,6 +80,11 @@ submitTripButton.addEventListener('click', (event) => {
   submitTripRequest();
 });
 
+loginPage.addEventListener('click', (event) => {
+  event.preventDefault();
+  showForgotCreds(event);
+})
+
 // Functions
 
 // This gets all available data but likely will want to make a
@@ -226,6 +231,16 @@ function openModalEstimateTrip() {
     // ADD EVENT LISTENER FOR CLICKING OUTSIDE OF MODAL
   };
 };
+
+function showForgotCreds(event) {
+  if (event.target.id === 'loginForgotCreds') {
+    loginErrorMessage.innerText = `User name should start with 'traveler' followed by
+    a unique user ID number between 1 and 50.
+    User name example: traveler35
+    The password is 'travel'.`;
+    openErrorModalReset();
+  }
+}
 
 function showThankYouMessage() {
   tripRequestOptions.classList.add('hidden');
