@@ -68,6 +68,22 @@ h2 {
   border-radius: 20px;
 }
 
+.agent-revenue-display {
+  height: 14vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#totalRevenueYTD {
+  margin-left: 12vw;
+}
+
+#currentBookedTravelers {
+  margin-right: 12vw;
+}
+
 .trip-request-section-top {
   height: 6vh;
   text-align: left;
@@ -174,6 +190,11 @@ input::placeholder {
   cursor: pointer;
 }
 
+.agent-buttons {
+  width: 10vw;
+  height: 5vh;
+}
+
 .trip-display {
   width: 100vw;
   display: flex;
@@ -195,6 +216,42 @@ input::placeholder {
   overflow-wrap: normal;
 }
 
+.agent-view {
+  width: 46vw;
+}
+
+.trips-to-review {
+  height: 20vh;
+  width: 45vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.trip-review-buttons {
+  width: 15vw;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding-left: 2vw;
+}
+
+#findTravelerSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.agent-search-section {
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 4vh;
+}
+
 .trip-headings {
   height: 5vh;
   margin-top: 10px;
@@ -209,6 +266,17 @@ input::placeholder {
   border-radius: 10px;
   margin-bottom: 2vh;
   overflow: scroll;
+}
+
+.agent-tile {
+  height: 19vh;
+  width: 27vw;
+  margin-left: 1.5vw;
+}
+
+#reviewRequestTitle {
+  margin-bottom: 2vh;
+  margin-top: 2vh;
 }
 
 .trip-tile-copy {

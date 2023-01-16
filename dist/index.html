@@ -17,7 +17,8 @@
   </header>
   <main class="main-display" id="mainDisplay">
     <!-- LOGIN PAGE -->
-    <section class="login-page" id="loginPage">
+    <!-- SET THIS BACK TO NOT HIDDEN -->
+    <section class="login-page hidden" id="loginPage">
       <form class="login-form" id="loginForm">
         <h2 id="loginTitle">Welcome to Travel Tracker</h2>
         <p>Please enter your credentials below to log in to your account</p>
@@ -86,6 +87,34 @@
         <section class="trip-sections" id="upcomingTripsSection">
           <h2 class="trip-headings" id="upcomingTripsHeading">Your Upcoming Trips</h2>
           <section id="upcomingTripsDisplay"></section>
+        </section>
+      </section>
+    </section>
+    <section class="user-dashboard" id="agentDashboard">
+      <section class="trip-request-section agent-revenue-display" id="agentRevenueDisplay">
+        <h2 id="totalRevenueYTD">Total revenue YTD: $308427</h2>
+        <h2 id="currentBookedTravelers"> Currently on trips: 27 travelers</h2>
+      </section>
+      <section class="trip-display" id="agentTripDash">
+        <section class="trip-sections agent-view" id="reviewRequestSection">
+          <h2 id="reviewRequestTitle">Requests awaiting review</h2>
+          <!-- TRIP TO REVIEW PROTO -->
+          <section class="trips-to-review">
+            <article class="trip-tile agent-tile">
+              <p class="trip-tile-copy"> John Doe<br>12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378</p>
+            </article>
+            <div class="trip-review-buttons">
+              <button class="submit-buttons agent-buttons">Approve</button>
+              <button class="submit-buttons agent-buttons">Deny</button>
+            </div>
+          </section>
+        </section>
+        <section class="trip-sections agent-view" id="findTravelerSection">
+          <div class="agent-search-section">
+            <h2 id="findTravelerTitle">Find a traveler by name</h2>
+            <input type="text" id="searchTravelerInput" placeholder="i.e. John Doe" required>
+            <button class="submit-buttons" id="searchTravelersButton">Search</button>
+          </div>
         </section>
       </section>
     </section>
