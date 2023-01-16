@@ -6,15 +6,16 @@ import Trip from './trip';
 
 // Promises
 let allTravelersPromise = apicalls.getAllTravelers();
-let singleTravelerPromise;
 let allTripsPromise = apicalls.getAllTrips();
 let allDestinationsPromise = apicalls.getAllDestinations();
+let singleTravelerPromise;
+let postTripPromise;
 
 // Global variables
-let currentTraveler;
 let allTrips;
 let allDestinations;
 let allTravelers;
+let currentTraveler;
 
 // Query selectors
 let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers');
@@ -36,18 +37,14 @@ let tripNumTravelers = document.getElementById('tripNumTravelers');
 let tripDuration = document.getElementById('tripDuration');
 let loginPage = document.getElementById('loginPage');
 let userDashboard = document.getElementById('userDashboard');
+let userProfileDisplay = document.getElementById('userProfileDisplay');
 let loginConfirmButton = document.getElementById('loginConfirmButton');
 let loginUserNameInput = document.getElementById('loginUserNameInput');
 let loginPassword = document.getElementById('loginPassword');
 
 // Event listeners
 window.addEventListener('load', () => {
-  // Get single user here with singleTravelerPromise = apicalls.getSingleTraveler(id);
-  // Will likely need to move this to a submit event listener and remove from here
-  // function to send a param to resolve promises for a single user?
-
-  // singleTravelerPromise = apicalls.getSingleTraveler(3);
-  resolvePromises();
+  resolvePromisesPageLoad();
   setTodaysDateToMin();
 });
 
@@ -88,16 +85,14 @@ submitTripButton.addEventListener('click', (event) => {
 // user login version and an agent login version so as not to 
 // pull more data than I need. submitTripRequest is calling
 // all data and would need to change to user only promise.all
-function resolvePromises() {
+function resolvePromisesPageLoad() {
   Promise.all([allTravelersPromise, allTripsPromise, allDestinationsPromise])
-    .then(data => {
+    .then((data) => {
       allTravelers = data[0].travelers;
-      // currentTraveler = data[1];
       allTrips = data[1].trips;
       allDestinations = data[2].destinations;
-      // currentTraveler = new Traveler(currentTraveler);
-      //Could make a helper for these if I call them more
     })
+    .catch((error) => alert('An error occoured while loading. Please refresh the page.', error))
 };
 
 // Add id parameter after log in is created to make this dynamic
@@ -118,20 +113,25 @@ function logUserIn() {
   loginPage.classList.add('hidden');
   userDashboard.classList.remove('hidden');
   singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
-  Promise.all([singleTravelerPromise])
-    .then(data => {
-      console.log(data)
-      currentTraveler = data[0];
+  Promise.resolve(singleTravelerPromise)
+    .then((data) => {
+      currentTraveler = data;
       currentTraveler = new Traveler(currentTraveler);
-      currentTraveler.addPastTrips(allTrips);
-      currentTraveler.addPendingTrips(allTrips);
-      currentTraveler.addUpcomingTrips(allTrips);
+      addAllTravelerTrips();
       loginPage.classList.add('hidden');
       userDashboard.classList.remove('hidden');
+      userProfileDisplay.classList.remove('hidden');
       updateDOM();
       console.log('currentTraveler', currentTraveler)
     })
-}
+    .catch((error) => alert('An error occoured while logging in. Please reload the page and try again.', error))
+};
+
+function addAllTravelerTrips() {
+  currentTraveler.addPastTrips(allTrips);
+  currentTraveler.addPendingTrips(allTrips);
+  currentTraveler.addUpcomingTrips(allTrips);
+};
 
 function updateDOM() {
   userName.innerText = currentTraveler.name;
@@ -201,6 +201,7 @@ function openModalEstimateTrip() {
     modalTripQuote.innerText = tripQuoteCopy;
     tripConfirmModal.setAttribute('aria-label', tripQuoteCopy)
     tripConfirmModal.showModal();
+    // ADD EVENT LISTENER FOR CLICKING OUTSIDE OF MODAL
   };
 };
 
@@ -284,7 +285,6 @@ function submitTripRequest() {
     'duration': +(tripDuration.value),
     'status': 'pending',
   }, allTrips)
-  console.log('post newTrip', newTrip);
   let postData = {
   'id': newTrip.id, 
   'userID': newTrip.userID,
@@ -295,15 +295,18 @@ function submitTripRequest() {
   'status': newTrip.status,
   'suggestedActivities': newTrip.suggestedActivities
   };
-  console.log('post postData', postData)
-  apicalls.postTripRequest(postData)
-    .then(data => {
+  postTripPromise = apicalls.postTripRequest(postData);
+  Promise.resolve(postTripPromise)
+    .then((data) => {
       console.log('Trip posted successfully', data);
-      allTravelersPromise = apicalls.getAllTravelers();
-      singleTravelerPromise = apicalls.getSingleTraveler(currentTraveler.id);
       allTripsPromise = apicalls.getAllTrips();
-      allDestinationsPromise = apicalls.getAllDestinations();
-      resolvePromises();
+      Promise.resolve(allTripsPromise)
+        .then((data) => {
+          allTrips = data.trips;
+          console.log('allTrips after post', allTrips)
+          addAllTravelerTrips();
+          updateDOM();
+        })
     })
     .catch((error) => alert('Error while submiting new trip request. Please reload the page and submit your request again.', error));
 };

@@ -10,7 +10,7 @@
 <body>
   <header class="header" id="header">
     <h1 class="site-title">Travel Tracker</h1>
-    <div class="header-user-profile hidden">
+    <div class="header-user-profile hidden" id="userProfileDisplay">
       <p id="userName"></p>
       <img id="userIcon" alt="user profile icon" src="https://img.icons8.com/external-gradak-royyan-wijaya/24/000000/B2FF9E/external-circle-gradak-user-gradak-royyan-wijaya.png"/>  
     </div>
@@ -22,12 +22,12 @@
         <h2 id="loginTitle">Welcome to Travel Tracker</h2>
         <p>Please enter your credentials below to log in to your account</p>
         <div class="login-user-name">
-          <label class="login-labels" for="userNameInput">User name</label>
+          <label class="login-labels" for="loginUserNameInput">User name</label>
           <input type="text" class="login-inputs" id="loginUserNameInput" required>
         </div>
         <div class="login-password">
           <label class="login-labels" for="loginPassword">Password</label>
-          <input type="text" class="login-inputs" id="loginPassword" required>
+          <input type="password" class="login-inputs" id="loginPassword" required>
         </div>
         <p id="loginForgotCreds">Forgot your user name or password?</p>
         <button class="submit-buttons" id="loginConfirmButton">Log in</button>
