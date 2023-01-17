@@ -23,7 +23,12 @@ class Trip {
   }
 
   addDestinationDetails(destID) {
-    return destinations.find(dest => dest.id === destID);
+    let foundDest = destinations.find(dest => dest.id === destID);
+    if (foundDest) {
+      return foundDest;
+    } else {
+      return null;
+    }
   }
 };
 export default Trip;

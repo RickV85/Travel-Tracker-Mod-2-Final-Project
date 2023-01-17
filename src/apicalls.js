@@ -82,4 +82,33 @@ function postTripRequest(postData) {
   })
 };
 
-export default { getAllTravelers, getSingleTraveler, getAllTrips, getAllDestinations, postTripRequest };
+function modifyTripRequest(postData) {
+  return fetch('http://localhost:3001/api/v1/updateTrip', {
+    method: 'POST',
+    body: JSON.stringify(postData),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Promise.reject(error);
+  })
+}
+
+// Delete request
+
+function deleteTrip(id) {
+  return fetch(`http://localhost:3001/api/v1/trips/${id}`, {
+    method: 'DELETE',
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Promise.reject(error);
+  })
+}
+
+export default { getAllTravelers, getSingleTraveler, getAllTrips, getAllDestinations, postTripRequest, modifyTripRequest, deleteTrip };

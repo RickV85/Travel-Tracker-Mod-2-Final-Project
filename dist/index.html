@@ -89,6 +89,44 @@
         </section>
       </section>
     </section>
+    <!-- AGENT DASH -->
+    <section id="agentDashboard" class="user-dashboard hidden">
+      <dialog class="modals" id="agencyDashErrorModal">
+        <div class="modal-content" id="dashErrorContents">
+          <h2>Uh, oh! An error occoured.</h2>
+          <p id="agencyDashErrorMessage"></p>
+        </div>
+      </dialog>
+      <section class="trip-request-section agent-revenue-display" id="agentRevenueDisplay">
+        <h2 id="totalRevenueYTD">Total revenue YTD: $308427</h2>
+        <h2 id="currentBookedTravelers"> Currently on trips: 27 travelers</h2>
+      </section>
+      <section class="trip-display" id="agentTripDash">
+        <section class="trip-sections agent-view" id="reviewRequestSection">
+          <h2 id="reviewRequestTitle">Requests awaiting review</h2>
+          <section class="review-trips-section" id="reviewTrips">
+            <!-- TRIP TO REVIEW PROTO -->
+            <section class="trips-to-review">
+              <article class="trip-tile agent-tile">
+                <p class="trip-tile-copy"> John Doe<br>12/18/22<br>5 nights in Key West, Florida<br>with 7 guests<br>Total trip cost: $4378</p>
+              </article>
+              <div class="trip-review-buttons">
+                <button class="submit-buttons agent-buttons">Approve</button>
+                <button class="submit-buttons agent-buttons">Deny</button>
+              </div>
+            </section>
+            <!-- end proto -->
+          </section>
+        </section>
+        <section class="trip-sections agent-view" id="findTravelerSection">
+          <div class="agent-search-section">
+            <h2 id="findTravelerTitle">Find a traveler by name</h2>
+            <input type="text" id="searchTravelerInput" placeholder="i.e. John Doe" required>
+            <button class="submit-buttons" id="searchTravelersButton">Search</button>
+          </div>
+        </section>
+      </section>
+    </section>
   </main>
   <script src="bundle.js"></script>
 </body>

@@ -3,6 +3,8 @@ import './css/styles.css';
 import apicalls from './apicalls';
 import Traveler from './traveler';
 import Trip from './trip';
+import TravelerRepo from './travelerRepo';
+import moment from 'moment';
 
 // Promises
 let allTravelersPromise = apicalls.getAllTravelers();
@@ -10,12 +12,15 @@ let allTripsPromise = apicalls.getAllTrips();
 let allDestinationsPromise = apicalls.getAllDestinations();
 let singleTravelerPromise;
 let postTripPromise;
+let modifyTripPromise;
+let deleteTripPromise;
 
 // Global variables
 let allTrips;
 let allDestinations;
 let allTravelers;
 let currentTraveler;
+let allTravelersRepo;
 
 // Query selectors
 let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers');
@@ -45,6 +50,12 @@ let loginErrorModal = document.getElementById('loginErrorModal');
 let loginErrorMessage = document.getElementById('loginErrorMessage');
 let userDashErrorModal = document.getElementById('userDashErrorModal');
 let userDashErrorMessage = document.getElementById('userDashErrorMessage');
+let totalRevenueYTD = document.getElementById('totalRevenueYTD');
+let currentBookedTravelers = document.getElementById('currentBookedTravelers');
+let reviewTrips = document.getElementById('reviewTrips');
+let reviewRequestSection = document.getElementById('reviewRequestSection');
+let agencyDashErrorModal = document.getElementById('agencyDashErrorModal');
+let agencyDashErrorMessage = document.getElementById('agencyDashErrorMessage');
 
 
 // Event listeners
@@ -88,45 +99,58 @@ submitTripButton.addEventListener('click', (event) => {
   submitTripRequest();
 });
 
+reviewRequestSection.addEventListener('click', (event) => {
+  event.preventDefault();
+  agentModifyDeleteRequest(event);
+});
+
 // Functions
 
-// This gets all available data but likely will want to make a
-// user login version and an agent login version so as not to 
-// pull more data than I need. submitTripRequest is calling
-// all data and would need to change to user only promise.all
 function resolvePromisesPageLoad() {
   Promise.all([allTravelersPromise, allTripsPromise, allDestinationsPromise])
     .then((data) => {
       allTravelers = data[0].travelers;
       allTrips = data[1].trips;
       allDestinations = data[2].destinations;
+      allTravelersRepo = new TravelerRepo(allTrips);
+      allTravelersRepo.instatiateTravelers(allTravelers);
+      allTravelersRepo.filterPendingTrips();
+      updateAgencyDOM();
+      console.log('repo', allTravelersRepo);
     })
     .catch((error) => showErrorModal('resolvePageLoadError', error))
 };
 
-// Add id parameter after log in is created to make this dynamic
 function logUserIn() {
   let enteredName = loginUserNameInput.value;
   let enteredPassword = loginPassword.value;
   let loginUserID = +(loginUserNameInput.value.split('traveler')[1]);
+  let validUserNames = allTravelersRepo.travelers.map((traveler) => {
+    return `traveler${traveler.id}`;
+  })
   
-  if (!(enteredPassword === 'travel') || !(enteredName.startsWith('traveler')) || loginUserID > allTravelers.length) {
-    showErrorModal('badCredentials');
-    return;
-  }
-
-  singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
-  Promise.resolve(singleTravelerPromise)
-    .then((data) => {
-      currentTraveler = data;
-      currentTraveler = new Traveler(currentTraveler);
-      addAllTravelerTrips();
+  if (validUserNames.includes(enteredName) && enteredPassword === 'travel') {
+    singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
+    Promise.resolve(singleTravelerPromise)
+      .then((data) => {
+        currentTraveler = data;
+        currentTraveler = new Traveler(currentTraveler);
+        addAllTravelerTrips();
+        loginPage.classList.add('hidden');
+        userDashboard.classList.remove('hidden');
+        userProfileDisplay.classList.remove('hidden');
+        updateTravelerDOM();
+        console.log('currentTraveler', currentTraveler)
+      })
+    } else if (enteredName === 'agency' && enteredPassword === 'travel') {
       loginPage.classList.add('hidden');
-      userDashboard.classList.remove('hidden');
+      agentDashboard.classList.remove('hidden');
       userProfileDisplay.classList.remove('hidden');
-      updateDOM();
-      console.log('currentTraveler', currentTraveler)
-    })
+      updateAgencyDOM();
+      console.log('on trips', allTravelersRepo.findNumTravelersOnTrips(allTravelers));
+    } else {
+      showErrorModal('badCredentials');
+    }
 };
 
 function showErrorModal(errorType, error) {
@@ -144,6 +168,12 @@ function showErrorModal(errorType, error) {
   } else if (errorType === 'missingRequiredInputValues') {
     userDashErrorMessage.innerHTML = `Please fill out all fields in trip request form.<br>Also, please do not enter 0 in any field.`;
     openUserDashModalReset();
+  } else if (errorType === 'agentModifyError') {
+    agencyDashErrorMessage.innerHTML = `The request you made to approve a trip failed.<br>Please try your request again.<br>${error}`;
+    openAgencyDashModalReset();
+  } else if (errorType === 'agentDeleteError') {
+    agencyDashErrorMessage.innerHTML = `The request you made to delete a trip failed.<br>Please try your request again.<br>${error}`;
+    openAgencyDashModalReset();
   }
 };
 
@@ -165,18 +195,49 @@ function openUserDashModalReset() {
   }, 3500)
 }
 
+function openAgencyDashModalReset() {
+  agencyDashErrorModal.showModal();
+  setTimeout(() => {
+    agencyDashErrorModal.close();
+    agencyDashErrorMessage.innerHTML = '';
+  }, 3500)
+}
+
 function addAllTravelerTrips() {
   currentTraveler.addPastTrips(allTrips);
   currentTraveler.addPendingTrips(allTrips);
   currentTraveler.addUpcomingTrips(allTrips);
 };
 
-function updateDOM() {
+function updateTravelerDOM() {
   userName.innerText = currentTraveler.name;
   displayTrips(currentTraveler.pastTrips);
   displayTrips(currentTraveler.pendingTrips);
   displayTrips(currentTraveler.upcomingTrips);
   displayPastTripsTotal();
+};
+
+function updateAgencyDOM() {
+  userName.innerText = 'Agent Portal';
+  userProfileDisplay.classList.remove('hidden');
+  let totalRevenue = allTravelersRepo.calculateTotalIncome();
+  totalRevenueYTD.innerText = `Total revenue YTD:$${totalRevenue}`;
+  let currentlyOnTrips = allTravelersRepo.findNumTravelersOnTrips();
+  currentBookedTravelers.innerText = `Currently on trips: ${currentlyOnTrips} travelers`;
+  reviewTrips.innerHTML = '';
+  allTravelersRepo.pendingTrips.forEach(trip => {
+    let travelerDetails = allTravelersRepo.travelers.find(traveler => traveler.id === trip.userID)
+    reviewTrips.innerHTML += `
+      <section class="trips-to-review">
+        <article class="trip-tile agent-tile">
+          <p class="trip-tile-copy">${travelerDetails.name}<br>${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}</p>
+        </article>
+        <div class="trip-review-buttons">
+          <button class="submit-buttons agent-buttons" id="approveTrip${trip.id}">Approve</button>
+          <button class="submit-buttons agent-buttons" id="denyTrip${trip.id}">Deny</button>
+        </div>
+      </section>`
+  })
 };
 
 function displayTrips(tripsToDisplay) {
@@ -272,28 +333,23 @@ function closeModalClearInputs() {
 }
 
 function convertDateForDOM(date) {
-  let dateYear = +(date.slice(0, 4));
-  let dateMonth = +(date.slice(5, 7));
-  let dateDay = +(date.slice(8, 10));
-  return `${dateMonth}/${dateDay}/${dateYear}`
+  return moment(date, "YYYY/MM/DD").format('l');
 };
 
-// Only sorting by year and then month
-// Could build more conditions in this to sort by day
 function sortTripsForDisplay(trips) {
-  trips.sort((a, b) => {
-    if (+(a.date.slice(0, 4)) > +(b.date.slice(0, 4))) {
-      a = 1;
-      b = 0;
-    } else if (+(a.date.slice(0, 4)) < +(b.date.slice(0, 4))) {
+  let sortedTrips = trips.sort((a, b) => {
+    let aDate = moment(a.date, "YYYY/MM/DD");
+    let bDate = moment(b.date, "YYYY/MM/DD")
+    if (aDate.isBefore(bDate)) {
       a = 0;
       b = 1;
-    } else if (+(a.date.slice(0, 4)) === +(b.date.slice(0, 4))) {
-      +a.date.slice(5, 7) >= +b.date.slice(5, 7) ? (a = 1, b = 0) : (a = 0, b = 1);
+    } else {
+      b = 0;
+      a = 1;
     }
     return (b - a);
   });
-  return trips;
+  return sortedTrips;
 };
 
 function displayPastTripsTotal() {
@@ -317,11 +373,7 @@ function createDestinationOptions() {
 };
 
 function setTodaysDateToMin() {
-  let today = new Date();
-	let dd = String(today.getDate()).padStart(2, '0');
-	let mm = String(today.getMonth() + 1).padStart(2, '0');
-	let yyyy = today.getFullYear();
-	today = `${yyyy}-${mm}-${dd}`;
+  let today = moment().format('YYYY-MM-DD');
 	tripDepartureDate.setAttribute("min", today);
 };
 
@@ -353,7 +405,7 @@ function submitTripRequest() {
           .then((data) => {
             allTrips = data.trips;
             addAllTravelerTrips();
-            updateDOM();
+            updateTravelerDOM();
             showThankYouMessage();
             setTimeout(() => {
               closeModalClearInputs();
@@ -364,6 +416,47 @@ function submitTripRequest() {
     .catch((error) => {
       showErrorModal('newTripPostError', error);
     });
+};
+
+function agentModifyDeleteRequest(event) {
+  let actionTarget = event.target.id;
+  if (actionTarget.startsWith('approveTrip')) {
+    let actionTripID = +(actionTarget.split('approveTrip')[1]);
+    let tripToApprove = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    let modifyTripPostData = {'id': tripToApprove.id, 'status': 'approved'};
+    modifyTripPromise = apicalls.modifyTripRequest(modifyTripPostData);
+    Promise.resolve(modifyTripPromise)
+      .then((data) => {
+        if (data) {
+          console.log('modify post data', data);
+          allTravelersPromise = apicalls.getAllTravelers();
+          allTripsPromise = apicalls.getAllTrips();
+          allDestinationsPromise = apicalls.getAllDestinations();
+          resolvePromisesPageLoad();
+        } 
+      })
+      .catch((error) => {
+        showErrorModal('agentModifyError', error);
+      });
+  } else if (actionTarget.startsWith('denyTrip')) {
+    let actionTripID = +(actionTarget.split('denyTrip')[1]);
+    let tripToDeny = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    let denyTripID = tripToDeny.id;
+    deleteTripPromise = apicalls.deleteTrip(denyTripID);
+    Promise.resolve(deleteTripPromise)
+      .then((data) => {
+        if (data) {
+          console.log('delete post data', data);
+          allTravelersPromise = apicalls.getAllTravelers();
+          allTripsPromise = apicalls.getAllTrips();
+          allDestinationsPromise = apicalls.getAllDestinations();
+          resolvePromisesPageLoad();
+        } 
+      })
+      .catch((error) => {
+        showErrorModal('agentDeleteError', error);
+      });
+  }
 };
 
 export default { showErrorModal };

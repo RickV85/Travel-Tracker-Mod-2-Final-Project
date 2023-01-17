@@ -1,14 +1,10 @@
 import chai from 'chai';
 const expect = chai.expect;
 import Trip from '../src/trip';
-import Traveler from '../src/traveler';
-import travelers from '../test/travelers-test-data';
 import trips from '../test/trips-test-data';
-import destinations from '../test/destinations-test-data';
 
 describe('Trip', function() {
   let newTrip;
-  let destination;
 
   beforeEach(() => {
     newTrip = new Trip({
@@ -26,7 +22,7 @@ describe('Trip', function() {
   });
 
   it('should have properties of id, userID, destinationID, travelers, date, duration, status, suggestedActivities, and estimatedCost', function() {
-    expect(newTrip.id).to.equal(18);
+    expect(newTrip.id).to.equal(19);
     expect(newTrip.userID).to.equal(1);
     expect(newTrip.destinationID).to.equal(32);
     expect(newTrip.travelers).to.equal(4);

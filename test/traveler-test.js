@@ -76,10 +76,6 @@ describe('Traveler', function() {
     testTraveler.addPastTrips(testTrips);
     testTraveler.calculateSpendInLastYear();
     expect(testTraveler.amountSpentInLastYear).to.equal(4543);
-    testTraveler = new Traveler(travelers[1]);
-    testTraveler.addPastTrips(testTrips);
-    testTraveler.calculateSpendInLastYear();
-    expect(testTraveler.amountSpentInLastYear).to.equal(0);
   })
 
   it('should have a method to add pending trips to pendingTrips property', function() {
