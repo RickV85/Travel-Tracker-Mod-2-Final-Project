@@ -56,6 +56,9 @@ let reviewTrips = document.getElementById('reviewTrips');
 let reviewRequestSection = document.getElementById('reviewRequestSection');
 let agencyDashErrorModal = document.getElementById('agencyDashErrorModal');
 let agencyDashErrorMessage = document.getElementById('agencyDashErrorMessage');
+let searchTravelerInput = document.getElementById('searchTravelerInput');
+let agentSearchSection = document.getElementById('agentSearchSection');
+let findTravelerSection = document.getElementById('findTravelerSection')
 
 
 // Event listeners
@@ -104,6 +107,24 @@ reviewRequestSection.addEventListener('click', (event) => {
   agentModifyDeleteRequest(event);
 });
 
+findTravelerSection.addEventListener('click', (event) => {
+  if (event.target.id === 'searchTravelersButton') {
+    travelerSearch();
+  }
+})
+
+findTravelerSection.addEventListener('click', (event) => {
+  if(event.target.id === "agentSearchGoBack") {
+    findTravelerSection.innerHTML = `
+    <div class="agent-search-section" id="agentSearchSection">
+      <h2 id="findTravelerTitle">Find a traveler by name</h2>
+      <input type="text" id="searchTravelerInput" placeholder="i.e. John Doe" required>
+      <button class="submit-buttons" id="searchTravelersButton">Search</button>
+    </div>`
+  findTravelerSection.classList.add('search-open')
+  }
+})
+
 // Functions
 
 function resolvePromisesPageLoad() {
@@ -116,7 +137,6 @@ function resolvePromisesPageLoad() {
       allTravelersRepo.instatiateTravelers(allTravelers);
       allTravelersRepo.filterPendingTrips();
       updateAgencyDOM();
-      console.log('repo', allTravelersRepo);
     })
     .catch((error) => showErrorModal('resolvePageLoadError', error))
 };
@@ -140,14 +160,12 @@ function logUserIn() {
         userDashboard.classList.remove('hidden');
         userProfileDisplay.classList.remove('hidden');
         updateTravelerDOM();
-        console.log('currentTraveler', currentTraveler)
       })
     } else if (enteredName === 'agency' && enteredPassword === 'travel') {
       loginPage.classList.add('hidden');
       agentDashboard.classList.remove('hidden');
       userProfileDisplay.classList.remove('hidden');
       updateAgencyDOM();
-      console.log('on trips', allTravelersRepo.findNumTravelersOnTrips(allTravelers));
     } else {
       showErrorModal('badCredentials');
     }
@@ -219,7 +237,6 @@ function updateTravelerDOM() {
 
 function updateAgencyDOM() {
   userName.innerText = 'Agent Portal';
-  userProfileDisplay.classList.remove('hidden');
   let totalRevenue = allTravelersRepo.calculateTotalIncome();
   totalRevenueYTD.innerText = `Total revenue YTD:$${totalRevenue}`;
   let currentlyOnTrips = allTravelersRepo.findNumTravelersOnTrips();
@@ -428,7 +445,6 @@ function agentModifyDeleteRequest(event) {
     Promise.resolve(modifyTripPromise)
       .then((data) => {
         if (data) {
-          console.log('modify post data', data);
           allTravelersPromise = apicalls.getAllTravelers();
           allTripsPromise = apicalls.getAllTrips();
           allDestinationsPromise = apicalls.getAllDestinations();
@@ -446,7 +462,6 @@ function agentModifyDeleteRequest(event) {
     Promise.resolve(deleteTripPromise)
       .then((data) => {
         if (data) {
-          console.log('delete post data', data);
           allTravelersPromise = apicalls.getAllTravelers();
           allTripsPromise = apicalls.getAllTrips();
           allDestinationsPromise = apicalls.getAllDestinations();
@@ -458,5 +473,60 @@ function agentModifyDeleteRequest(event) {
       });
   }
 };
+
+function travelerSearch() {
+  let searchValue = searchTravelerInput.value;
+  let foundTraveler = allTravelersRepo.travelers.find(traveler => traveler.name === searchValue);
+  let travelerName = foundTraveler.name;
+  let amountSpent = foundTraveler.amountSpentInLastYear;
+  let travelerPastTrips = foundTraveler.pastTrips.reduce((html, trip) => {
+    let tripHTML = `
+    <div class= "agent-search-trip-tile">
+      <article class="trip-tile agent-tile">
+        <p class="trip-tile-copy">
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+        </p>
+      </article>
+    </div>`
+    html += tripHTML;
+    return html;
+  }, '');
+  let travelPendingTrips = foundTraveler.pendingTrips.reduce((html, trip) => {
+    let tripHTML = `
+    <div class= "agent-search-trip-tile">
+      <article class="trip-tile agent-tile">
+        <p class="trip-tile-copy">
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+        </p>
+      </article>
+    </div>`
+    html += tripHTML;
+    return html;
+  }, '');
+  let travelerUpcomingTrips = foundTraveler.upcomingTrips.reduce((html, trip) => {
+    let tripHTML = `
+    <div class= "agent-search-trip-tile">
+      <article class="trip-tile agent-tile">
+        <p class="trip-tile-copy">
+          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+        </p>
+      </article>
+    </div>`
+    html += tripHTML;
+    return html;
+  }, ''); 
+  agentSearchSection.innerHTML = '';
+  agentSearchSection.innerHTML = `
+  <h2 id="findTravelerTitle">${travelerName} - YTD Spend: $${amountSpent}</h2>
+  <h3>Past Trips</h3>
+  ${travelerPastTrips}
+  <h3>Pending Trips</h3>
+  ${travelPendingTrips}
+  <h3>Upcoming Trips</h3>
+  ${travelerUpcomingTrips}
+  <button class="submit-buttons agent-buttons" id="agentSearchGoBack">Go back</button>`
+  agentSearchSection.classList.add('traveler-trips-view');
+  findTravelerSection.classList.remove('search-open');
+}
 
 export default { showErrorModal };
