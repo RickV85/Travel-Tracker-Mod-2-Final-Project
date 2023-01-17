@@ -237,7 +237,6 @@ function updateTravelerDOM() {
 
 function updateAgencyDOM() {
   userName.innerText = 'Agent Portal';
-  userProfileDisplay.classList.remove('hidden');
   let totalRevenue = allTravelersRepo.calculateTotalIncome();
   totalRevenueYTD.innerText = `Total revenue YTD:$${totalRevenue}`;
   let currentlyOnTrips = allTravelersRepo.findNumTravelersOnTrips();
