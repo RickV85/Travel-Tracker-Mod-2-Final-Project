@@ -91,10 +91,6 @@ submitTripButton.addEventListener('click', (event) => {
 
 // Functions
 
-// This gets all available data but likely will want to make a
-// user login version and an agent login version so as not to 
-// pull more data than I need. submitTripRequest is calling
-// all data and would need to change to user only promise.all
 function resolvePromisesPageLoad() {
   Promise.all([allTravelersPromise, allTripsPromise, allDestinationsPromise])
     .then((data) => {
@@ -105,7 +101,6 @@ function resolvePromisesPageLoad() {
     .catch((error) => showErrorModal('resolvePageLoadError', error))
 };
 
-// Add id parameter after log in is created to make this dynamic
 function logUserIn() {
   let enteredName = loginUserNameInput.value;
   let enteredPassword = loginPassword.value;
@@ -285,32 +280,24 @@ function closeModalClearInputs() {
   modalTripQuote.innerText = '';
 }
 
-/////////////////////////////////// USE moment.JS!
 function convertDateForDOM(date) {
-  let dateYear = +(date.slice(0, 4));
-  let dateMonth = +(date.slice(5, 7));
-  let dateDay = +(date.slice(8, 10));
-  return `${dateMonth}/${dateDay}/${dateYear}`
+  return moment(date).format('l');
 };
 
-// Only sorting by year and then month
-// Could build more conditions in this to sort by day
-
-/////////////////////////////////// USE moment.JS!
 function sortTripsForDisplay(trips) {
-  trips.sort((a, b) => {
-    if (+(a.date.slice(0, 4)) > +(b.date.slice(0, 4))) {
-      a = 1;
-      b = 0;
-    } else if (+(a.date.slice(0, 4)) < +(b.date.slice(0, 4))) {
+  let sortedTrips = trips.sort((a, b) => {
+    let aDate = moment(a.date, "YYYY/MM/DD");
+    let bDate = moment(b.date, "YYYY/MM/DD")
+    if (aDate.isBefore(bDate)) {
       a = 0;
       b = 1;
-    } else if (+(a.date.slice(0, 4)) === +(b.date.slice(0, 4))) {
-      +a.date.slice(5, 7) >= +b.date.slice(5, 7) ? (a = 1, b = 0) : (a = 0, b = 1);
+    } else {
+      b = 0;
+      a = 1;
     }
     return (b - a);
   });
-  return trips;
+  return sortedTrips;
 };
 
 function displayPastTripsTotal() {
@@ -333,13 +320,8 @@ function createDestinationOptions() {
   })
 };
 
-/////////////////////////////////// USE moment.JS!
 function setTodaysDateToMin() {
-  let today = new Date();
-	let dd = String(today.getDate()).padStart(2, '0');
-	let mm = String(today.getMonth() + 1).padStart(2, '0');
-	let yyyy = today.getFullYear();
-	today = `${yyyy}-${mm}-${dd}`;
+  let today = moment().format('YYYY-MM-DD');
 	tripDepartureDate.setAttribute("min", today);
 };
 
