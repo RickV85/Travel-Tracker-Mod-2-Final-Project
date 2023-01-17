@@ -109,24 +109,37 @@ function logUserIn() {
   let enteredName = loginUserNameInput.value;
   let enteredPassword = loginPassword.value;
   let loginUserID = +(loginUserNameInput.value.split('traveler')[1]);
-  
-  if (!(enteredPassword === 'travel') || !(enteredName.startsWith('traveler')) || loginUserID > allTravelers.length) {
-    showErrorModal('badCredentials');
-    return;
-  }
 
-  singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
-  Promise.resolve(singleTravelerPromise)
-    .then((data) => {
-      currentTraveler = data;
-      currentTraveler = new Traveler(currentTraveler);
-      addAllTravelerTrips();
-      loginPage.classList.add('hidden');
-      userDashboard.classList.remove('hidden');
-      userProfileDisplay.classList.remove('hidden');
-      updateDOM();
-      console.log('currentTraveler', currentTraveler)
-    })
+  // MIGHT WANT TO MAKE A SWITCH FUNC HERE to trigger modals
+  // Could use an iterator to run each case against.
+
+  // if (!(enteredPassword === 'travel')) {
+  //   showErrorModal('badCredentials');
+  //   return;
+  // } else if (!(enteredName.startsWith('traveler')) || loginUserID > allTravelers.length)
+  
+  // else if (!(enteredName === 'agency') || !(enteredPassword === 'travel')) {
+  //   showErrorModal('badCredentials');
+  //   return;
+  // }
+  if (enteredPassword === 'travel' && enteredName.startsWith('traveler')) {
+    singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
+    Promise.resolve(singleTravelerPromise)
+      .then((data) => {
+        currentTraveler = data;
+        currentTraveler = new Traveler(currentTraveler);
+        addAllTravelerTrips();
+        loginPage.classList.add('hidden');
+        userDashboard.classList.remove('hidden');
+        userProfileDisplay.classList.remove('hidden');
+        updateDOM();
+        console.log('currentTraveler', currentTraveler)
+      })  
+  } else if (enteredName === 'agency' && enteredPassword === 'travel') {
+    loginPage.classList.add('hidden');
+    agentDashboard.classList.remove('hidden');
+    userProfileDisplay.classList.remove('hidden');
+  }
 };
 
 function showErrorModal(errorType, error) {
@@ -365,5 +378,9 @@ function submitTripRequest() {
       showErrorModal('newTripPostError', error);
     });
 };
+
+function agentSearchForUser() {
+  
+}
 
 export default { showErrorModal };
