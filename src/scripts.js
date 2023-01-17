@@ -106,19 +106,7 @@ function logUserIn() {
   let enteredPassword = loginPassword.value;
   let loginUserID = +(loginUserNameInput.value.split('traveler')[1]);
 
-  // MIGHT WANT TO MAKE A SWITCH FUNC HERE to trigger modals
-  // Could use an iterator to run each case against.
-
-  // if (!(enteredPassword === 'travel')) {
-  //   showErrorModal('badCredentials');
-  //   return;
-  // } else if (!(enteredName.startsWith('traveler')) || loginUserID > allTravelers.length)
-  
-  // else if (!(enteredName === 'agency') || !(enteredPassword === 'travel')) {
-  //   showErrorModal('badCredentials');
-  //   return;
-  // }
-  if (enteredPassword === 'travel' && enteredName.startsWith('traveler')) {
+  let travelerLogin = () => {
     singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
     Promise.resolve(singleTravelerPromise)
       .then((data) => {
@@ -130,12 +118,27 @@ function logUserIn() {
         userProfileDisplay.classList.remove('hidden');
         updateDOM();
         console.log('currentTraveler', currentTraveler)
-      })  
-  } else if (enteredName === 'agency' && enteredPassword === 'travel') {
+      })
+    };
+
+  let agencyLogin = () => { 
     loginPage.classList.add('hidden');
     agentDashboard.classList.remove('hidden');
     userProfileDisplay.classList.remove('hidden');
+    };
+
+  if (!(enteredPassword === 'travel')) {
+    showErrorModal('badCredentials');
+    return;
   }
+  if (enteredName.startsWith('traveler') && loginUserID < allTravelers.length && loginUserID >= 1) {
+    travelerLogin();
+    return;
+  } else if (enteredName === 'agency') {
+    agencyLogin();
+    return;
+  }
+  showErrorModal('badCredentials');
 };
 
 function showErrorModal(errorType, error) {
@@ -281,7 +284,7 @@ function closeModalClearInputs() {
 }
 
 function convertDateForDOM(date) {
-  return moment(date).format('l');
+  return moment(date, "YYYY/MM/DD").format('l');
 };
 
 function sortTripsForDisplay(trips) {
