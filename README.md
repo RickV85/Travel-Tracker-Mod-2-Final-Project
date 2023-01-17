@@ -22,10 +22,11 @@ This app is designed to be a travel booking portal that allows either a traveler
 - Navigate to (http://localhost:8080/) in your browser to interact with the app.
 
 ## Preview of the app:
+### Login Screen
 <img width="776" alt="Screenshot 2023-01-17 at 11 51 33 AM" src="https://user-images.githubusercontent.com/113707169/212987848-53b2677a-c55f-4d71-ae05-91767188fb0f.png">
-
+### Traveler Dashboard
 <img width="776" alt="Screenshot 2023-01-17 at 12 01 47 PM" src="https://user-images.githubusercontent.com/113707169/212988176-ce880299-2c5b-4873-b9f9-cc7200a04269.png">
-
+### Agent Dashboard
 <img width="776" alt="Screenshot 2023-01-17 at 11 53 02 AM" src="https://user-images.githubusercontent.com/113707169/212987976-a7a405ae-6c8f-4836-a313-3cdbe4febd7b.png">
 
 ### Context:
