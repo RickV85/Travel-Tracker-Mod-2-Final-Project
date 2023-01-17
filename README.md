@@ -37,7 +37,7 @@ This app was created from ground up in one week as the final project of the 2nd 
 - Web API's
 
 ### Contributors:
-- Rick Vermeil [LinkedIn]](https://www.linkedin.com/in/rick-vermeil-b93581159/) [GitHub](https://github.com/RickV85)
+- Rick Vermeil (he/him) [LinkedIn](https://www.linkedin.com/in/rick-vermeil-b93581159/) [GitHub](https://github.com/RickV85)
 
 
 ### Wins + Challenges:
