@@ -15,6 +15,7 @@ describe('TravelerRepo', function() {
     testTrips = trips;
     testRepo = new TravelerRepo(testTrips);
     testRepo.instatiateTravelers(testTravelers);
+    testRepo.findNumTravelersOnTrips(testTravelers);
   })
 
   it('should create a new instance of TravlerRepo', function() {
@@ -130,7 +131,7 @@ describe('TravelerRepo', function() {
         ],
       },
       {
-      "amountSpentInLastYear": 0,
+      "amountSpentInLastYear": 2838,
       "id": 2,
       "name": "Rachael Vaughten",
       "pastTrips": [
@@ -209,7 +210,26 @@ describe('TravelerRepo', function() {
         status: 'approved',
         suggestedActivities: [],
         estimatedCost: 3205
-        }
+        },
+        {
+        id: 1005,
+        userID: 2,
+        destinationID: 22,
+        destinationDetails: {
+          "alt": "people standing inside a colosseum during the day",
+          "destination": "Rome, Italy",
+          "estimatedFlightCostPerPerson": 650,
+          "estimatedLodgingCostPerDay": 90,
+          "id": 22,
+          "image": "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80",
+        },
+        travelers: 3,
+        date: '2023/01/15',
+        duration: 7,
+        status: 'approved',
+        suggestedActivities: [],
+        estimatedCost: 2838
+        },
       ],
       "pendingTrips": [
         {
@@ -382,18 +402,52 @@ describe('TravelerRepo', function() {
   })
 
   it('should have a method to return total income from all travelers it holds', function() {
-    expect(testRepo.calculateTotalIncome()).to.equal(454)
+    expect(testRepo.calculateTotalIncome()).to.equal(738)
   })
 
-  it.skip('should have a method to filter all pending trips and return them', function() {
-
+  it('should have a method to filter all pending trips and return them', function() {
+    testRepo.filterPendingTrips();
+    expect(testRepo.pendingTrips).to.deep.equal([
+      {
+        "date": "2020/12/27",
+        "destinationID": 43,
+        "duration": 18,
+        "id": 171,
+        "status": "pending",
+        "suggestedActivities": [],
+        "travelers": 1,
+        "userID": 2,
+      },
+      {
+        "date": "2023/05/02",
+        "destinationID": 3,
+        "duration": 3,
+        "id": 1003,
+        "status": "pending",
+        "suggestedActivities": [],
+        "travelers": 3,
+        "userID": 1,
+      },
+      {
+        "date": "2023/06/02",
+        "destinationID": 10,
+        "duration": 3,
+        "id": 1004,
+        "status": "pending",
+        "suggestedActivities": [],
+        "travelers": 3,
+        "userID": 1,
+      }
+    ])
   })
 
-  it.skip('should have a method to return how many travelers are currently on trips', function() {
-
+  it('should have a method to return how many travelers are currently on trips', function() {
+    // This test relies on today's date and will fail in the future
+    expect(testRepo.findNumTravelersOnTrips()).to.equal(1)
   })
 
-  it.skip('should have a method to find a user by name and return it', function() {
-    
+  it('should have a method to find a user by name and return it', function() {
+    console.log(testRepo.travelers[0]);
+    expect(testRepo.findUserByName("Ham Leadbeater").name).to.deep.equal("Ham Leadbeater")
   })
 })

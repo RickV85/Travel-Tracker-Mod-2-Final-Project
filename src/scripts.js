@@ -3,6 +3,7 @@ import './css/styles.css';
 import apicalls from './apicalls';
 import Traveler from './traveler';
 import Trip from './trip';
+import moment from 'moment';
 
 // Promises
 let allTravelersPromise = apicalls.getAllTravelers();
@@ -284,6 +285,7 @@ function closeModalClearInputs() {
   modalTripQuote.innerText = '';
 }
 
+/////////////////////////////////// USE moment.JS!
 function convertDateForDOM(date) {
   let dateYear = +(date.slice(0, 4));
   let dateMonth = +(date.slice(5, 7));
@@ -293,6 +295,8 @@ function convertDateForDOM(date) {
 
 // Only sorting by year and then month
 // Could build more conditions in this to sort by day
+
+/////////////////////////////////// USE moment.JS!
 function sortTripsForDisplay(trips) {
   trips.sort((a, b) => {
     if (+(a.date.slice(0, 4)) > +(b.date.slice(0, 4))) {
@@ -329,6 +333,7 @@ function createDestinationOptions() {
   })
 };
 
+/////////////////////////////////// USE moment.JS!
 function setTodaysDateToMin() {
   let today = new Date();
 	let dd = String(today.getDate()).padStart(2, '0');
@@ -378,9 +383,5 @@ function submitTripRequest() {
       showErrorModal('newTripPostError', error);
     });
 };
-
-function agentSearchForUser() {
-  
-}
 
 export default { showErrorModal };

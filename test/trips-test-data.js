@@ -169,6 +169,16 @@ const trips = [
   duration: 3,
   status: "pending",
   suggestedActivities: [ ]
+  },
+  {
+  id: 1005,
+  userID: 2,
+  destinationID: 22,
+  travelers: 3,
+  date: "2023/01/15",
+  duration: 7,
+  status: "approved",
+  suggestedActivities: [ ]
   }
 ]
 module.exports = trips;
