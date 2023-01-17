@@ -3,6 +3,7 @@ import './css/styles.css';
 import apicalls from './apicalls';
 import Traveler from './traveler';
 import Trip from './trip';
+import TravelerRepo from './travelerRepo';
 import moment from 'moment';
 
 // Promises
@@ -11,12 +12,15 @@ let allTripsPromise = apicalls.getAllTrips();
 let allDestinationsPromise = apicalls.getAllDestinations();
 let singleTravelerPromise;
 let postTripPromise;
+let modifyTripPromise;
+let deleteTripPromise;
 
 // Global variables
 let allTrips;
 let allDestinations;
 let allTravelers;
 let currentTraveler;
+let allTravelersRepo;
 
 // Query selectors
 let inputs = document.querySelectorAll('#destinationDropdown, #tripDepartureDate, #tripDuration, #tripNumTravelers');
@@ -46,6 +50,10 @@ let loginErrorModal = document.getElementById('loginErrorModal');
 let loginErrorMessage = document.getElementById('loginErrorMessage');
 let userDashErrorModal = document.getElementById('userDashErrorModal');
 let userDashErrorMessage = document.getElementById('userDashErrorMessage');
+let totalRevenueYTD = document.getElementById('totalRevenueYTD');
+let currentBookedTravelers = document.getElementById('currentBookedTravelers');
+let reviewTrips = document.getElementById('reviewTrips');
+let reviewRequestSection = document.getElementById('reviewRequestSection');
 
 
 // Event listeners
@@ -89,6 +97,49 @@ submitTripButton.addEventListener('click', (event) => {
   submitTripRequest();
 });
 
+reviewRequestSection.addEventListener('click', (event) => {
+  event.preventDefault();
+  let actionTarget = event.target.id;
+  alert(actionTarget)
+  if (actionTarget.startsWith('approveTrip')) {
+    let actionTripID = +(actionTarget.split('approveTrip')[1]);
+    let tripToApprove = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    let modifyTripPostData = {'id': tripToApprove.id, 'status': 'approved'};
+    modifyTripPromise = apicalls.modifyTripRequest(modifyTripPostData);
+    Promise.resolve(modifyTripPromise)
+      .then((data) => {
+        if (data) {
+          console.log('modify post data', data);
+          allTravelersPromise = apicalls.getAllTravelers();
+          allTripsPromise = apicalls.getAllTrips();
+          allDestinationsPromise = apicalls.getAllDestinations();
+          resolvePromisesPageLoad();
+        } 
+      })
+      .catch((error) => {
+        showErrorModal('newTripPostError', error);
+      });
+  } else if (actionTarget.startsWith('denyTrip')) {
+    let actionTripID = +(actionTarget.split('denyTrip')[1]);
+    let tripToDeny = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    let denyTripID = tripToDeny.id;
+    deleteTripPromise = apicalls.deleteTrip(denyTripID);
+    Promise.resolve(deleteTripPromise)
+      .then((data) => {
+        if (data) {
+          console.log('delete post data', data);
+          allTravelersPromise = apicalls.getAllTravelers();
+          allTripsPromise = apicalls.getAllTrips();
+          allDestinationsPromise = apicalls.getAllDestinations();
+          resolvePromisesPageLoad();
+        } 
+      })
+      .catch((error) => {
+        showErrorModal('newTripPostError', error);
+      });
+  }
+});
+
 // Functions
 
 function resolvePromisesPageLoad() {
@@ -97,6 +148,11 @@ function resolvePromisesPageLoad() {
       allTravelers = data[0].travelers;
       allTrips = data[1].trips;
       allDestinations = data[2].destinations;
+      allTravelersRepo = new TravelerRepo(allTrips);
+      allTravelersRepo.instatiateTravelers(allTravelers);
+      allTravelersRepo.filterPendingTrips();
+      updateAgencyDOM();
+      console.log('repo', allTravelersRepo);
     })
     .catch((error) => showErrorModal('resolvePageLoadError', error))
 };
@@ -105,8 +161,11 @@ function logUserIn() {
   let enteredName = loginUserNameInput.value;
   let enteredPassword = loginPassword.value;
   let loginUserID = +(loginUserNameInput.value.split('traveler')[1]);
-
-  let travelerLogin = () => {
+  let validUserNames = allTravelersRepo.travelers.map((traveler) => {
+    return `traveler${traveler.id}`;
+  })
+  
+  if (validUserNames.includes(enteredName) && enteredPassword === 'travel') {
     singleTravelerPromise = apicalls.getSingleTraveler(loginUserID);
     Promise.resolve(singleTravelerPromise)
       .then((data) => {
@@ -116,29 +175,18 @@ function logUserIn() {
         loginPage.classList.add('hidden');
         userDashboard.classList.remove('hidden');
         userProfileDisplay.classList.remove('hidden');
-        updateDOM();
+        updateTravelerDOM();
         console.log('currentTraveler', currentTraveler)
       })
-    };
-
-  let agencyLogin = () => { 
-    loginPage.classList.add('hidden');
-    agentDashboard.classList.remove('hidden');
-    userProfileDisplay.classList.remove('hidden');
-    };
-
-  if (!(enteredPassword === 'travel')) {
-    showErrorModal('badCredentials');
-    return;
-  }
-  if (enteredName.startsWith('traveler') && loginUserID < allTravelers.length && loginUserID >= 1) {
-    travelerLogin();
-    return;
-  } else if (enteredName === 'agency') {
-    agencyLogin();
-    return;
-  }
-  showErrorModal('badCredentials');
+    } else if (enteredName === 'agency' && enteredPassword === 'travel') {
+      loginPage.classList.add('hidden');
+      agentDashboard.classList.remove('hidden');
+      userProfileDisplay.classList.remove('hidden');
+      updateAgencyDOM();
+      console.log('on trips', allTravelersRepo.findNumTravelersOnTrips(allTravelers));
+    } else {
+      showErrorModal('badCredentials');
+    }
 };
 
 function showErrorModal(errorType, error) {
@@ -183,12 +231,35 @@ function addAllTravelerTrips() {
   currentTraveler.addUpcomingTrips(allTrips);
 };
 
-function updateDOM() {
+function updateTravelerDOM() {
   userName.innerText = currentTraveler.name;
   displayTrips(currentTraveler.pastTrips);
   displayTrips(currentTraveler.pendingTrips);
   displayTrips(currentTraveler.upcomingTrips);
   displayPastTripsTotal();
+};
+
+function updateAgencyDOM() {
+  userName.innerText = 'Agent Portal';
+  userProfileDisplay.classList.remove('hidden');
+  let totalRevenue = allTravelersRepo.calculateTotalIncome();
+  totalRevenueYTD.innerText = `Total revenue YTD:$${totalRevenue}`;
+  let currentlyOnTrips = allTravelersRepo.findNumTravelersOnTrips();
+  currentBookedTravelers.innerText = `Currently on trips: ${currentlyOnTrips} travelers`;
+  reviewTrips.innerHTML = '';
+  allTravelersRepo.pendingTrips.forEach(trip => {
+    let travelerDetails = allTravelersRepo.travelers.find(traveler => traveler.id === trip.userID)
+    reviewTrips.innerHTML += `
+      <section class="trips-to-review">
+        <article class="trip-tile agent-tile">
+          <p class="trip-tile-copy">${travelerDetails.name}<br>${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}</p>
+        </article>
+        <div class="trip-review-buttons">
+          <button class="submit-buttons agent-buttons" id="approveTrip${trip.id}">Approve</button>
+          <button class="submit-buttons agent-buttons" id="denyTrip${trip.id}">Deny</button>
+        </div>
+      </section>`
+  })
 };
 
 function displayTrips(tripsToDisplay) {
@@ -356,7 +427,7 @@ function submitTripRequest() {
           .then((data) => {
             allTrips = data.trips;
             addAllTravelerTrips();
-            updateDOM();
+            updateTravelerDOM();
             showThankYouMessage();
             setTimeout(() => {
               closeModalClearInputs();

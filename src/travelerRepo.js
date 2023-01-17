@@ -1,4 +1,5 @@
 import Traveler from "./traveler";
+import Trip from "./trip";
 import moment from 'moment';
 
 
@@ -31,7 +32,7 @@ class TravelerRepo {
   filterPendingTrips() {
     let filteredPending = this.allTrips.reduce((penTrips, trip) => {
       if (trip.status === 'pending') {
-        penTrips.push(trip);
+        penTrips.push(new Trip(trip, this.allTrips));
       }
       return penTrips;
     }, []);

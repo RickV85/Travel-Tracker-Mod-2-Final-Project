@@ -1,14 +1,10 @@
 import chai from 'chai';
 const expect = chai.expect;
 import Trip from '../src/trip';
-import Traveler from '../src/traveler';
-import travelers from '../test/travelers-test-data';
 import trips from '../test/trips-test-data';
-import destinations from '../test/destinations-test-data';
 
 describe('Trip', function() {
   let newTrip;
-  let destination;
 
   beforeEach(() => {
     newTrip = new Trip({

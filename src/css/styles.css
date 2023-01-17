@@ -74,6 +74,7 @@ h2 {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
 }
 
 #totalRevenueYTD {
@@ -223,6 +224,7 @@ input::placeholder {
 .trips-to-review {
   height: 19vh;
   width: 45vw;
+  margin-bottom: 2vh;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -242,6 +244,7 @@ input::placeholder {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
 }
 
 .agent-search-section {
@@ -277,6 +280,7 @@ input::placeholder {
 #reviewRequestTitle {
   margin-bottom: 2vh;
   margin-top: 2vh;
+  text-align: center;
 }
 
 .trip-tile-copy {

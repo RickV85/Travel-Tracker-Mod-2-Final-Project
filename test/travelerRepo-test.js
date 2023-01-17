@@ -1,6 +1,5 @@
 import chai from 'chai';
 const expect = chai.expect;
-import Traveler from '../src/traveler';
 import TravelerRepo from '../src/travelerRepo';
 import travelers from '../test/travelers-test-data';
 import trips from './trips-test-data';
@@ -15,7 +14,7 @@ describe('TravelerRepo', function() {
     testTrips = trips;
     testRepo = new TravelerRepo(testTrips);
     testRepo.instatiateTravelers(testTravelers);
-    testRepo.findNumTravelersOnTrips(testTravelers);
+    testRepo.filterPendingTrips();
   })
 
   it('should create a new instance of TravlerRepo', function() {
@@ -409,34 +408,60 @@ describe('TravelerRepo', function() {
     testRepo.filterPendingTrips();
     expect(testRepo.pendingTrips).to.deep.equal([
       {
-        "date": "2020/12/27",
-        "destinationID": 43,
-        "duration": 18,
-        "id": 171,
-        "status": "pending",
-        "suggestedActivities": [],
-        "travelers": 1,
-        "userID": 2,
+        id: 171,
+        userID: 2,
+        destinationID: 43,
+        destinationDetails: {
+          id: 43,
+          destination: 'Nassau, The Bahamas',
+          estimatedLodgingCostPerDay: 550,
+          estimatedFlightCostPerPerson: 90,
+          image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1664&q=80',
+          alt: 'aerial photography of white and blue cruise ships during daytime'
+        },
+        travelers: 1,
+        date: '2020/12/27',
+        duration: 18,
+        status: 'pending',
+        suggestedActivities: [],
+        estimatedCost: 10989
       },
       {
-        "date": "2023/05/02",
-        "destinationID": 3,
-        "duration": 3,
-        "id": 1003,
-        "status": "pending",
-        "suggestedActivities": [],
-        "travelers": 3,
-        "userID": 1,
+        id: 1003,
+        userID: 1,
+        destinationID: 3,
+        destinationDetails: {
+          id: 3,
+          destination: 'Sydney, Austrailia',
+          estimatedLodgingCostPerDay: 130,
+          estimatedFlightCostPerPerson: 950,
+          image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80',
+          alt: 'opera house and city buildings on the water with boats'
+        },
+        travelers: 3,
+        date: '2023/05/02',
+        duration: 3,
+        status: 'pending',
+        suggestedActivities: [],
+        estimatedCost: 3564
       },
       {
-        "date": "2023/06/02",
-        "destinationID": 10,
-        "duration": 3,
-        "id": 1004,
-        "status": "pending",
-        "suggestedActivities": [],
-        "travelers": 3,
-        "userID": 1,
+        id: 1004,
+        userID: 1,
+        destinationID: 10,
+        destinationDetails: {
+          id: 10,
+          destination: 'Toronto, Canada',
+          estimatedLodgingCostPerDay: 90,
+          estimatedFlightCostPerPerson: 450,
+          image: 'https://images.unsplash.com/photo-1535776142635-8fa180c46af7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2756&q=80'
+        },
+        travelers: 3,
+        date: '2023/06/02',
+        duration: 3,
+        status: 'pending',
+        suggestedActivities: [],
+        estimatedCost: 1782
       }
     ])
   })
@@ -447,7 +472,6 @@ describe('TravelerRepo', function() {
   })
 
   it('should have a method to find a user by name and return it', function() {
-    console.log(testRepo.travelers[0]);
     expect(testRepo.findUserByName("Ham Leadbeater").name).to.deep.equal("Ham Leadbeater")
   })
 })
