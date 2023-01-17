@@ -54,6 +54,8 @@ let totalRevenueYTD = document.getElementById('totalRevenueYTD');
 let currentBookedTravelers = document.getElementById('currentBookedTravelers');
 let reviewTrips = document.getElementById('reviewTrips');
 let reviewRequestSection = document.getElementById('reviewRequestSection');
+let agencyDashErrorModal = document.getElementById('agencyDashErrorModal');
+let agencyDashErrorMessage = document.getElementById('agencyDashErrorMessage');
 
 
 // Event listeners
@@ -99,45 +101,7 @@ submitTripButton.addEventListener('click', (event) => {
 
 reviewRequestSection.addEventListener('click', (event) => {
   event.preventDefault();
-  let actionTarget = event.target.id;
-  alert(actionTarget)
-  if (actionTarget.startsWith('approveTrip')) {
-    let actionTripID = +(actionTarget.split('approveTrip')[1]);
-    let tripToApprove = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
-    let modifyTripPostData = {'id': tripToApprove.id, 'status': 'approved'};
-    modifyTripPromise = apicalls.modifyTripRequest(modifyTripPostData);
-    Promise.resolve(modifyTripPromise)
-      .then((data) => {
-        if (data) {
-          console.log('modify post data', data);
-          allTravelersPromise = apicalls.getAllTravelers();
-          allTripsPromise = apicalls.getAllTrips();
-          allDestinationsPromise = apicalls.getAllDestinations();
-          resolvePromisesPageLoad();
-        } 
-      })
-      .catch((error) => {
-        showErrorModal('newTripPostError', error);
-      });
-  } else if (actionTarget.startsWith('denyTrip')) {
-    let actionTripID = +(actionTarget.split('denyTrip')[1]);
-    let tripToDeny = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
-    let denyTripID = tripToDeny.id;
-    deleteTripPromise = apicalls.deleteTrip(denyTripID);
-    Promise.resolve(deleteTripPromise)
-      .then((data) => {
-        if (data) {
-          console.log('delete post data', data);
-          allTravelersPromise = apicalls.getAllTravelers();
-          allTripsPromise = apicalls.getAllTrips();
-          allDestinationsPromise = apicalls.getAllDestinations();
-          resolvePromisesPageLoad();
-        } 
-      })
-      .catch((error) => {
-        showErrorModal('newTripPostError', error);
-      });
-  }
+  agentModifyDeleteRequest(event);
 });
 
 // Functions
@@ -204,6 +168,12 @@ function showErrorModal(errorType, error) {
   } else if (errorType === 'missingRequiredInputValues') {
     userDashErrorMessage.innerHTML = `Please fill out all fields in trip request form.<br>Also, please do not enter 0 in any field.`;
     openUserDashModalReset();
+  } else if (errorType === 'agentModifyError') {
+    agencyDashErrorMessage.innerHTML = `The request you made to approve a trip failed.<br>Please try your request again.<br>${error}`;
+    openAgencyDashModalReset();
+  } else if (errorType === 'agentDeleteError') {
+    agencyDashErrorMessage.innerHTML = `The request you made to delete a trip failed.<br>Please try your request again.<br>${error}`;
+    openAgencyDashModalReset();
   }
 };
 
@@ -222,6 +192,14 @@ function openUserDashModalReset() {
   setTimeout(() => {
     userDashErrorModal.close();
     userDashErrorMessage.innerHTML = '';
+  }, 3500)
+}
+
+function openAgencyDashModalReset() {
+  agencyDashErrorModal.showModal();
+  setTimeout(() => {
+    agencyDashErrorModal.close();
+    agencyDashErrorMessage.innerHTML = '';
   }, 3500)
 }
 
@@ -438,6 +416,47 @@ function submitTripRequest() {
     .catch((error) => {
       showErrorModal('newTripPostError', error);
     });
+};
+
+function agentModifyDeleteRequest(event) {
+  let actionTarget = event.target.id;
+  if (actionTarget.startsWith('approveTrip')) {
+    let actionTripID = +(actionTarget.split('approveTrip')[1]);
+    let tripToApprove = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    let modifyTripPostData = {'id': tripToApprove.id, 'status': 'approved'};
+    modifyTripPromise = apicalls.modifyTripRequest(modifyTripPostData);
+    Promise.resolve(modifyTripPromise)
+      .then((data) => {
+        if (data) {
+          console.log('modify post data', data);
+          allTravelersPromise = apicalls.getAllTravelers();
+          allTripsPromise = apicalls.getAllTrips();
+          allDestinationsPromise = apicalls.getAllDestinations();
+          resolvePromisesPageLoad();
+        } 
+      })
+      .catch((error) => {
+        showErrorModal('agentModifyError', error);
+      });
+  } else if (actionTarget.startsWith('denyTrip')) {
+    let actionTripID = +(actionTarget.split('denyTrip')[1]);
+    let tripToDeny = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    let denyTripID = tripToDeny.id;
+    deleteTripPromise = apicalls.deleteTrip(denyTripID);
+    Promise.resolve(deleteTripPromise)
+      .then((data) => {
+        if (data) {
+          console.log('delete post data', data);
+          allTravelersPromise = apicalls.getAllTravelers();
+          allTripsPromise = apicalls.getAllTrips();
+          allDestinationsPromise = apicalls.getAllDestinations();
+          resolvePromisesPageLoad();
+        } 
+      })
+      .catch((error) => {
+        showErrorModal('agentDeleteError', error);
+      });
+  }
 };
 
 export default { showErrorModal };
