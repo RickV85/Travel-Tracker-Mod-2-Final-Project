@@ -13,7 +13,6 @@ let allDestinationsPromise = apicalls.getAllDestinations();
 let singleTravelerPromise;
 let postTripPromise;
 let modifyTripPromise;
-let deleteTripPromise;
 
 // Global variables
 let allTrips;
@@ -187,10 +186,7 @@ function showErrorModal(errorType, error) {
     userDashErrorMessage.innerHTML = `Please fill out all fields in trip request form.<br>Also, please do not enter 0 in any field.`;
     openUserDashModalReset();
   } else if (errorType === 'agentModifyError') {
-    agencyDashErrorMessage.innerHTML = `The request you made to approve a trip failed.<br>Please try your request again.<br>${error}`;
-    openAgencyDashModalReset();
-  } else if (errorType === 'agentDeleteError') {
-    agencyDashErrorMessage.innerHTML = `The request you made to delete a trip failed.<br>Please try your request again.<br>${error}`;
+    agencyDashErrorMessage.innerHTML = `The request you made to approve or deny a trip failed.<br>Please try your request again.<br>${error}`;
     openAgencyDashModalReset();
   }
 };
@@ -258,41 +254,26 @@ function updateAgencyDOM() {
 };
 
 function displayTrips(tripsToDisplay) {
-  let sortedTrips;
+  let sortedTrips = sortTripsForDisplay(tripsToDisplay);
+  let displayTarget;
+
   if (tripsToDisplay === currentTraveler.pastTrips) {
-    sortedTrips = sortTripsForDisplay(tripsToDisplay);
-    pastTripsDisplay.innerHTML = '';
-    sortedTrips.forEach(trip => {
-      pastTripsDisplay.innerHTML += 
-      `<article class="trip-tile">
-        <p class="trip-tile-copy">
-          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
-        </p>
-      </article>`;
-    });
+    displayTarget = pastTripsDisplay;
   } else if (tripsToDisplay === currentTraveler.pendingTrips) {
-    sortedTrips = sortTripsForDisplay(tripsToDisplay);
-    pendingTripsDisplay.innerHTML = '';
-    sortedTrips.forEach(trip => {
-      pendingTripsDisplay.innerHTML += 
-      `<article class="trip-tile">
-        <p class="trip-tile-copy">
-          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
-        </p>
-      </article>`;
-    });
+    displayTarget = pendingTripsDisplay;
   } else if (tripsToDisplay === currentTraveler.upcomingTrips) {
-    sortedTrips = sortTripsForDisplay(tripsToDisplay);
-    upcomingTripsDisplay.innerHTML = '';
-    sortedTrips.forEach(trip => {
-      upcomingTripsDisplay.innerHTML += 
-      `<article class="trip-tile">
-        <p class="trip-tile-copy">
-          Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
-        </p>
-      </article>`;
-    });
-  };
+    displayTarget = upcomingTripsDisplay;
+  }
+
+  displayTarget.innerHTML = '';
+  sortedTrips.forEach(trip => {
+    displayTarget.innerHTML += 
+    `<article class="trip-tile">
+      <p class="trip-tile-copy">
+        Departure date: ${convertDateForDOM(trip.date)}<br>${trip.duration} nights in ${trip.destinationDetails.destination}<br>with ${trip.travelers} guests<br>Total trip cost: $${trip.estimatedCost}
+      </p>
+    </article>`;
+  });
 };
 
 function openModalEstimateTrip() {
@@ -324,10 +305,15 @@ function openModalEstimateTrip() {
 
 function showForgotCreds(event) {
   if (event.target.id === 'loginForgotCreds') {
-    loginErrorMessage.innerText = `User name should start with 'traveler' followed by
+    loginErrorMessage.innerText = `To log in as a traveler:
+    User name should start with 'traveler' followed by
     a unique user ID number between 1 and 50.
     User name example: traveler35
-    The password is 'travel'.`;
+    
+    To log in as an agent:
+    user name: agency
+    
+    The password is 'travel' for all users.`;
     openErrorModalReset();
   }
 }
@@ -437,41 +423,34 @@ function submitTripRequest() {
 
 function agentModifyDeleteRequest(event) {
   let actionTarget = event.target.id;
+  let actionTripID;
+  let tripToModify;
+  let modifyTripPostData;
+
   if (actionTarget.startsWith('approveTrip')) {
-    let actionTripID = +(actionTarget.split('approveTrip')[1]);
-    let tripToApprove = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
-    let modifyTripPostData = {'id': tripToApprove.id, 'status': 'approved'};
+    actionTripID = +(actionTarget.split('approveTrip')[1]);
+    tripToModify = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    modifyTripPostData = {'id': tripToModify.id, 'status': 'approved'};
     modifyTripPromise = apicalls.modifyTripRequest(modifyTripPostData);
-    Promise.resolve(modifyTripPromise)
-      .then((data) => {
-        if (data) {
-          allTravelersPromise = apicalls.getAllTravelers();
-          allTripsPromise = apicalls.getAllTrips();
-          allDestinationsPromise = apicalls.getAllDestinations();
-          resolvePromisesPageLoad();
-        } 
-      })
-      .catch((error) => {
-        showErrorModal('agentModifyError', error);
-      });
   } else if (actionTarget.startsWith('denyTrip')) {
-    let actionTripID = +(actionTarget.split('denyTrip')[1]);
-    let tripToDeny = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
-    let denyTripID = tripToDeny.id;
-    deleteTripPromise = apicalls.deleteTrip(denyTripID);
-    Promise.resolve(deleteTripPromise)
-      .then((data) => {
-        if (data) {
-          allTravelersPromise = apicalls.getAllTravelers();
-          allTripsPromise = apicalls.getAllTrips();
-          allDestinationsPromise = apicalls.getAllDestinations();
-          resolvePromisesPageLoad();
-        } 
-      })
-      .catch((error) => {
-        showErrorModal('agentDeleteError', error);
-      });
+    actionTripID = +(actionTarget.split('denyTrip')[1]);
+    tripToModify = allTravelersRepo.pendingTrips.find(trip => trip.id === actionTripID);
+    modifyTripPostData = tripToModify.id;
+    modifyTripPromise = apicalls.deleteTrip(modifyTripPostData);
   }
+
+  Promise.resolve(modifyTripPromise)
+  .then((data) => {
+    if (data) {
+      allTravelersPromise = apicalls.getAllTravelers();
+      allTripsPromise = apicalls.getAllTrips();
+      allDestinationsPromise = apicalls.getAllDestinations();
+      resolvePromisesPageLoad();
+    } 
+  })
+  .catch((error) => {
+    showErrorModal('agentModifyError', error);
+  });
 };
 
 function travelerSearch() {
