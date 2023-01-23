@@ -109,6 +109,8 @@ reviewRequestSection.addEventListener("click", (event) => {
 
 findTravelerSection.addEventListener("click", (event) => {
   if (event.target.id === "searchTravelersButton") {
+    agentSearchSection = document.getElementById("agentSearchSection");
+    searchTravelerInput = document.getElementById("searchTravelerInput");
     travelerSearch();
   }
 });
@@ -121,6 +123,7 @@ findTravelerSection.addEventListener("click", (event) => {
       <input type="text" id="searchTravelerInput" placeholder="i.e. John Doe" required>
       <button class="submit-buttons" id="searchTravelersButton">Search</button>
     </div>`;
+    agentSearchSection.innerHTML = "";
     findTravelerSection.classList.add("search-open");
   }
 });
@@ -497,8 +500,7 @@ function travelerSearch() {
   let travelerUpcomingTrips = displayTripsAgentSearch(
     foundTraveler.upcomingTrips
   );
-
-  agentSearchSection.innerHTML = "";
+  
   agentSearchSection.innerHTML = `
   <h2 id="findTravelerTitle">${travelerName} - YTD Spend: $${amountSpent}</h2>
   <h3>Past Trips</h3>
