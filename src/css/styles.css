@@ -121,9 +121,17 @@ h3 {
 }
 
 .trip-request-modal {
-  height: 50vw;
+  height: fit-content;
+  width: fit-content;
   transform: translateY(-30%);
 }
+
+/* #userDashErrorModal {
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} */
 
 #tripDestImage {
   height: 35vh;
@@ -144,7 +152,7 @@ h3 {
 }
 
 .modal-content {
-  height: 49vh;
+  height: fit-content;
   width: 50vw;
   display: flex;
   flex-direction: column;
@@ -418,6 +426,128 @@ button:focus-visible, button:hover {
 
 #loginConfirmButton {
   width: 12vw;
+}
+
+/* Mobile display - under 800px wide */
+
+@media only screen and (max-width: 800px) {
+
+  .site-title, .header-user-profile {
+    transform: scale(.8);
+    margin-left: 0vw;
+  }
+  
+  .login-form {
+    width: 90vw;
+  }
+
+  .login-inputs {
+    width: 60vw;
+  }
+
+  #loginConfirmButton {
+    width: 29vw;
+  }
+
+  .user-dashboard {
+    height: fit-content;
+  }
+
+  .trip-request-section {
+    width: 90vw;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+  }
+
+  .trip-request-section-bottom {
+    height: fit-content;
+  }
+
+  .trip-request-form {
+    flex-direction: column;
+  }
+
+  #destinationDropdown {
+    width: 70vw;
+    margin-left: 0vw;
+    margin-bottom: 2vh;
+  }
+  
+  #tripDepartureDate {
+    width: 70vw;
+    margin-left: 0vw;
+    margin-bottom: 2vh;
+  }
+  
+  #tripDuration {
+    width: 70vw;
+    margin-left: 0vw;
+    margin-bottom: 2vh;
+  }
+  
+  #tripNumTravelers {
+    width: 70vw;
+    margin-left: 0vw;
+    margin-bottom: 2vh;
+  }
+  
+  #quoteTripButton {
+    width: 45vw;
+    margin-left: 0vw;
+    margin-bottom: 2vh;
+  }
+
+  .modals {
+    width: 90vw;
+  }
+
+  .trip-request-modal {
+    height: 62vh;
+    width: 90vw;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .modal-content {
+    width: 90vw;
+  }
+
+  #dashErrorContent {
+    width: 90vw;
+  }
+
+  #loginErrorContents {
+    width: 90vw;
+  }
+
+  #tripDestImage {
+    height: 25vh;
+  }
+
+  .trip-request-options {
+    width: 90vw;
+  }
+
+  .submit-buttons {
+    width: 40vw;
+    font-size: 16px;
+  }
+
+  .trip-display {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .trip-sections {
+    width: 90vw;
+    height: fit-content;
+    margin-bottom: 2vh;
+  }
+
+  .past-trip-total, .trip-tile {
+    width: 85vw;
+  }
+
 }
 
 /* Highest priority classes */
