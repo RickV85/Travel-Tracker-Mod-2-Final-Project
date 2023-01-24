@@ -113,10 +113,35 @@ h3 {
 }
 
 .modals {
-  height: 25vw;
+  height: 50vw;
   width: 50vw;
-  margin: 50vh auto 0;
-  transform: translateY(-40%);
+  margin: 34.5vh auto 0;
+  transform: translateY(-30%);
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.trip-request-modal {
+  height: 50vw;
+  width: 50vw;
+  margin: 34.5vh auto 0;
+  transform: translateY(-30%);
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+#tripDestImage {
+  height: 35vh;
+}
+
+.login-modal {
+  height: 35vh;
+  display: flex;
+  transform: translateY(-0%);
+}
+
+.add-flex {
+  display: flex;
 }
 
 .modals::backdrop {
@@ -324,14 +349,6 @@ input::placeholder {
 
 #agentSearchGoBack {
   margin-top: 3vh;
-}
-
-#tripConfirmModal {
-  height: 50vh;
-}
-
-#tripDestImage {
-  height: 20vh;
 }
 
 /* Hover and focus states for a11y */

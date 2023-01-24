@@ -89,6 +89,7 @@ quoteTripButton.addEventListener("click", (event) => {
 
 modalGoBack.addEventListener("click", (event) => {
   event.preventDefault();
+  tripConfirmModal.classList.remove('add-flex');
   tripConfirmModal.close();
 });
 
@@ -197,8 +198,10 @@ function showErrorModal(errorType, error) {
 
 function openErrorModalReset() {
   loginErrorModal.showModal();
+  loginErrorModal.classList.add('login-modal');
   setTimeout(() => {
     loginErrorModal.close();
+    loginErrorModal.classList.remove('login-modal');
     loginUserNameInput.value = "";
     loginPassword.value = "";
     loginErrorMessage.innerHTML = `Your username and password did not match.<br>Please check your credentials and try again.`;
@@ -297,10 +300,10 @@ function displayTrips(tripsToDisplay) {
 
 function openModalEstimateTrip() {
   const empty = (input) => input === "";
-  const zero = (input) => input === "0";
+  const bad = (input) => +(input) <= 0;
   const values = [];
   inputs.forEach((input) => values.push(input.value));
-  if (values.some(empty) || values.some(zero)) {
+  if (values.some(empty) || values.some(bad)) {
     showErrorModal("missingRequiredInputValues");
     return;
   } else {
@@ -324,6 +327,7 @@ function openModalEstimateTrip() {
     modalTripQuote.innerText = tripQuoteCopy;
     tripDestImage.setAttribute('src', newTripQuote.destinationDetails.image);
     tripConfirmModal.setAttribute("aria-label", tripQuoteCopy);
+    tripConfirmModal.classList.add('add-flex');
     tripConfirmModal.showModal();
   }
 }
@@ -443,6 +447,7 @@ function submitTripRequest() {
           showThankYouMessage();
           setTimeout(() => {
             closeModalClearInputs();
+            tripConfirmModal.classList.remove('add-flex');
           }, 3000);
         });
       }
