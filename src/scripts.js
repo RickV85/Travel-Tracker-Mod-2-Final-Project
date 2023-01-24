@@ -95,6 +95,7 @@ modalGoBack.addEventListener("click", (event) => {
 
 tripConfirmModal.addEventListener("click", (event) => {
   if (event.target === tripConfirmModal) {
+    tripConfirmModal.classList.remove('add-flex');
     tripConfirmModal.close();
   }
 });

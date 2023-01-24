@@ -113,21 +113,16 @@ h3 {
 }
 
 .modals {
-  height: 50vw;
   width: 50vw;
   margin: 34.5vh auto 0;
-  transform: translateY(-30%);
+  transform: translateY(-20%);
   flex-direction: column;
   justify-content: space-around;
 }
 
 .trip-request-modal {
   height: 50vw;
-  width: 50vw;
-  margin: 34.5vh auto 0;
   transform: translateY(-30%);
-  flex-direction: column;
-  justify-content: space-around;
 }
 
 #tripDestImage {
@@ -135,7 +130,7 @@ h3 {
 }
 
 .login-modal {
-  height: 35vh;
+  height: 40vh;
   display: flex;
   transform: translateY(-0%);
 }
