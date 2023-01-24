@@ -124,7 +124,7 @@ h3 {
 }
 
 .modal-content {
-  height: 25vw;
+  height: 49vh;
   width: 50vw;
   display: flex;
   flex-direction: column;
@@ -142,7 +142,7 @@ h3 {
 
 .trip-request-buttons {
   width: 20vw;
-  margin: 2vw;
+  margin: 1vw;
 }
 
 input, select {
@@ -324,6 +324,14 @@ input::placeholder {
 
 #agentSearchGoBack {
   margin-top: 3vh;
+}
+
+#tripConfirmModal {
+  height: 50vh;
+}
+
+#tripDestImage {
+  height: 20vh;
 }
 
 /* Hover and focus states for a11y */

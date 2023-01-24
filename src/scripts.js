@@ -60,6 +60,7 @@ let agencyDashErrorMessage = document.getElementById("agencyDashErrorMessage");
 let searchTravelerInput = document.getElementById("searchTravelerInput");
 let agentSearchSection = document.getElementById("agentSearchSection");
 let findTravelerSection = document.getElementById("findTravelerSection");
+let tripDestImage = document.getElementById('tripDestImage');
 
 // Event listeners
 window.addEventListener("load", () => {
@@ -321,6 +322,7 @@ function openModalEstimateTrip() {
     with ${newTripQuote.travelers} guests
     Total trip cost: $${newTripQuote.estimatedCost}`;
     modalTripQuote.innerText = tripQuoteCopy;
+    tripDestImage.setAttribute('src', newTripQuote.destinationDetails.image);
     tripConfirmModal.setAttribute("aria-label", tripQuoteCopy);
     tripConfirmModal.showModal();
   }
