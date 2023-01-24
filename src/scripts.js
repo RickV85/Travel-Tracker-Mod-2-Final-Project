@@ -295,6 +295,7 @@ function displayTrips(tripsToDisplay) {
       trip.travelers
     } guests<br>Total trip cost: $${trip.estimatedCost}
       </p>
+      <img class="trip-tile-image" src="${trip.destinationDetails.image} alt="${trip.destinationDetails.alt}"
     </article>`;
   });
 }
@@ -327,6 +328,7 @@ function openModalEstimateTrip() {
     Total trip cost: $${newTripQuote.estimatedCost}`;
     modalTripQuote.innerText = tripQuoteCopy;
     tripDestImage.setAttribute('src', newTripQuote.destinationDetails.image);
+    tripDestImage.setAttribute('alt', newTripQuote.destinationDetails.alt)
     tripConfirmModal.setAttribute("aria-label", tripQuoteCopy);
     tripConfirmModal.classList.add('add-flex');
     tripConfirmModal.showModal();

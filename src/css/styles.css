@@ -293,13 +293,23 @@ input::placeholder {
 }
 
 .trip-tile {
-  height: 16vh;
+  height: fit-content;
   width: 24vw;
   background-color: white;
   box-shadow: 0px 0px 0 1px #086375;
   border-radius: 10px;
   margin-bottom: 2vh;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-align: center;
+}
+
+.trip-tile-image {
+  height: 17vh;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px 2px grey;
 }
 
 .agent-tile {
