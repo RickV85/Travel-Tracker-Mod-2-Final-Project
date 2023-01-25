@@ -321,9 +321,12 @@ input::placeholder {
 }
 
 .agent-tile {
-  height: fit-content;
+  height: 19vh;
   width: 27vw;
   margin-left: 1.5vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #reviewRequestTitle {
