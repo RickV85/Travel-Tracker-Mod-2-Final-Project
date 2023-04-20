@@ -59,4 +59,3 @@ Some challenges included:
 Some wins included:
 - I spent a lot of time on error handling and made sure to alert the user in an attractive way when their request was bad, either due to an error on thier part or a server error and exactly what went wrong.
 - I enjoyed designing the site without a comp to work off of. I was able to almost identically recreate my design on my app which is a win!
-
