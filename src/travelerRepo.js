@@ -9,7 +9,7 @@ class TravelerRepo {
     this.pendingTrips = [];
   }
 
-  instatiateTravelers(allTravelers) {
+  instantiateTravelers(allTravelers) {
     allTravelers.forEach((traveler) => {
       let newTraveler = new Traveler(traveler);
       newTraveler.addPastTrips(this.allTrips);

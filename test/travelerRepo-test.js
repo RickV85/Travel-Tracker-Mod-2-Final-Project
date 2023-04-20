@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import chai from "chai";
 const expect = chai.expect;
 import TravelerRepo from "../src/travelerRepo";
@@ -13,7 +14,7 @@ describe("TravelerRepo", function () {
     testTravelers = travelers;
     testTrips = trips;
     testRepo = new TravelerRepo(testTrips);
-    testRepo.instatiateTravelers(testTravelers);
+    testRepo.instantiateTravelers(testTravelers);
     testRepo.filterPendingTrips();
   });
 

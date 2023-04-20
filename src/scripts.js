@@ -143,7 +143,7 @@ function resolvePromisesPageLoad() {
       allTrips = data[1].trips;
       allDestinations = data[2].destinations;
       allTravelersRepo = new TravelerRepo(allTrips);
-      allTravelersRepo.instatiateTravelers(allTravelers);
+      allTravelersRepo.instantiateTravelers(allTravelers);
       allTravelersRepo.filterPendingTrips();
       updateAgencyDOM();
     })
