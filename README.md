@@ -23,6 +23,17 @@ This app is designed to be a travel booking portal that allows either a traveler
 
 ## Preview of the app:
 
+Login Screen
+
+<img width="776" alt="Screenshot 2023-01-17 at 11 51 33 AM" src="https://user-images.githubusercontent.com/113707169/212987848-53b2677a-c55f-4d71-ae05-91767188fb0f.png">
+
+Traveler Dashboard
+
+<img width="776" alt="Screenshot 2023-01-17 at 12 01 47 PM" src="https://user-images.githubusercontent.com/113707169/212988176-ce880299-2c5b-4873-b9f9-cc7200a04269.png">
+
+Agent Dashboard
+
+<img width="776" alt="Screenshot 2023-01-17 at 11 53 02 AM" src="https://user-images.githubusercontent.com/113707169/212987976-a7a405ae-6c8f-4836-a313-3cdbe4febd7b.png">
 
 ### Context:
 This app was created from ground up in one week as the final project of the 2nd quarter, or module, in Turing's Front-End Engineering program.
@@ -37,7 +48,7 @@ This app was created from ground up in one week as the final project of the 2nd 
 - Web API's
 
 ### Contributors:
-- Rick Vermeil (he/him)[LinkedIn]](https://www.linkedin.com/in/rick-vermeil-b93581159/) [GitHub](https://github.com/RickV85)
+- Rick Vermeil (he/him) [LinkedIn](https://www.linkedin.com/in/rick-vermeil-b93581159/) [GitHub](https://github.com/RickV85)
 
 
 ### Wins + Challenges:
@@ -48,4 +59,3 @@ Some challenges included:
 Some wins included:
 - I spent a lot of time on error handling and made sure to alert the user in an attractive way when their request was bad, either due to an error on thier part or a server error and exactly what went wrong.
 - I enjoyed designing the site without a comp to work off of. I was able to almost identically recreate my design on my app which is a win!
-
