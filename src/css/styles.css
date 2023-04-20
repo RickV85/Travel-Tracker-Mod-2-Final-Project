@@ -11,22 +11,22 @@ body {
   background-repeat: no-repeat;
   background-color: white;
   margin: 0;
-  font-family: 'Saira', sans-serif;
+  font-family: "Saira", sans-serif;
 }
 
 h2 {
-  color: #3C1642;
+  color: #3c1642;
   font-size: 24px;
 }
 
 h3 {
-  color: #3C1642;
+  color: #3c1642;
   font-size: 20px;
 }
 
 .header {
   height: 10vh;
-  background-color: #3C1642;
+  background-color: #3c1642;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -36,14 +36,14 @@ h3 {
 .site-title {
   font-size: 36px;
   font-weight: 700;
-  color: #AFFC41;
+  color: #affc41;
   margin-left: 2.5vw;
 }
 
 .header-user-profile {
   display: flex;
   flex-direction: row;
-  color: #B2FF9E;
+  color: #b2ff9e;
   margin-right: 2.5vw;
 }
 
@@ -68,7 +68,7 @@ h3 {
 
 .trip-request-section {
   width: 95vw;
-  background-color: #B0CDD3;
+  background-color: #b0cdd3;
   box-shadow: 0px 0px 0 1px #086375;
   border-radius: 20px;
 }
@@ -173,13 +173,14 @@ h3 {
   margin: 1vw;
 }
 
-input, select {
+input,
+select {
   height: 7vh;
   border-width: 0px;
   border-radius: 10px;
   box-shadow: 0px 0px 0 1px #086375;
   padding-left: 10px;
-  font-family: 'Saira', sans-serif;
+  font-family: "Saira", sans-serif;
   font-size: 16px;
 }
 
@@ -214,12 +215,12 @@ input::placeholder {
 
 .submit-buttons {
   height: 7vh;
-  background-color:#3C1642;
-  color: #AFFC41;
-  font-family: 'Saira', sans-serif;
+  background-color: #3c1642;
+  color: #affc41;
+  font-family: "Saira", sans-serif;
   font-weight: 700;
   font-size: 20px;
-  box-shadow: 0px 0px 0 2px #AFFC41;
+  box-shadow: 0px 0px 0 2px #affc41;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -243,7 +244,7 @@ input::placeholder {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-color: #B0CDD3;
+  background-color: #b0cdd3;
   box-shadow: 0px 0px 0 1px #086375;
   border-radius: 20px;
   overflow-y: scroll;
@@ -369,12 +370,15 @@ input::placeholder {
 
 /* Hover and focus states for a11y */
 
-input:focus-visible, input:hover, 
-select:focus-visible, select:hover {
-  box-shadow: 0px 0px 0 4px #1DD3B0;
+input:focus-visible,
+input:hover,
+select:focus-visible,
+select:hover {
+  box-shadow: 0px 0px 0 4px #1dd3b0;
 }
 
-button:focus-visible, button:hover {
+button:focus-visible,
+button:hover {
   box-shadow: 0px 0px 0 5px #1dd3ae83;
 }
 
@@ -396,12 +400,13 @@ button:focus-visible, button:hover {
   text-align: center;
   height: 55vh;
   width: 60vw;
-  background-color: #B0CDD3;
+  background-color: #b0cdd3;
   border-radius: 20px;
   box-shadow: 0px 0px 0 1px #086375;
 }
 
-.login-user-name, .login-password {
+.login-user-name,
+.login-password {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -412,7 +417,7 @@ button:focus-visible, button:hover {
 }
 
 .login-labels {
-  color: #3C1642;
+  color: #3c1642;
   font-size: 20px;
   font-weight: 700;
 }
@@ -434,12 +439,12 @@ button:focus-visible, button:hover {
 /* Mobile display - under 800px wide */
 
 @media only screen and (max-width: 800px) {
-
-  .site-title, .header-user-profile {
-    transform: scale(.8);
+  .site-title,
+  .header-user-profile {
+    transform: scale(0.8);
     margin-left: 0vw;
   }
-  
+
   .login-form {
     width: 90vw;
   }
@@ -475,25 +480,25 @@ button:focus-visible, button:hover {
     margin-left: 0vw;
     margin-bottom: 2vh;
   }
-  
+
   #tripDepartureDate {
     width: 70vw;
     margin-left: 0vw;
     margin-bottom: 2vh;
   }
-  
+
   #tripDuration {
     width: 70vw;
     margin-left: 0vw;
     margin-bottom: 2vh;
   }
-  
+
   #tripNumTravelers {
     width: 70vw;
     margin-left: 0vw;
     margin-bottom: 2vh;
   }
-  
+
   #quoteTripButton {
     width: 45vw;
     margin-left: 0vw;
@@ -547,10 +552,10 @@ button:focus-visible, button:hover {
     margin-bottom: 2vh;
   }
 
-  .past-trip-total, .trip-tile {
+  .past-trip-total,
+  .trip-tile {
     width: 85vw;
   }
-
 }
 
 /* Highest priority classes */

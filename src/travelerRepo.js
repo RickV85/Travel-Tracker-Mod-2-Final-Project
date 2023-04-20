@@ -1,7 +1,6 @@
 import Traveler from "./traveler";
 import Trip from "./trip";
-import moment from 'moment';
-
+import moment from "moment";
 
 class TravelerRepo {
   constructor(allTrips) {
@@ -11,7 +10,7 @@ class TravelerRepo {
   }
 
   instatiateTravelers(allTravelers) {
-    allTravelers.forEach(traveler => {
+    allTravelers.forEach((traveler) => {
       let newTraveler = new Traveler(traveler);
       newTraveler.addPastTrips(this.allTrips);
       newTraveler.addPendingTrips(this.allTrips);
@@ -20,18 +19,18 @@ class TravelerRepo {
       this.travelers.push(newTraveler);
     });
   }
-  
+
   calculateTotalIncome() {
     let totalSpend = this.travelers.reduce((total, traveler) => {
       total += traveler.amountSpentInLastYear;
       return total;
     }, 0);
-    return Math.round(totalSpend * .1);
+    return Math.round(totalSpend * 0.1);
   }
 
   filterPendingTrips() {
     let filteredPending = this.allTrips.reduce((penTrips, trip) => {
-      if (trip.status === 'pending') {
+      if (trip.status === "pending") {
         penTrips.push(new Trip(trip, this.allTrips));
       }
       return penTrips;
@@ -40,11 +39,16 @@ class TravelerRepo {
   }
 
   findNumTravelersOnTrips() {
-    let approvedTrips = this.allTrips.filter(trip => trip.status === "approved");
+    let approvedTrips = this.allTrips.filter(
+      (trip) => trip.status === "approved"
+    );
     let today = moment();
     let currentTrips = approvedTrips.reduce((total, trip) => {
       let tripDepartureDate = moment(trip.date, "YYYY/MM/DD");
-      let tripEndDate = moment(tripDepartureDate, "YYYY/MM/DD").add(trip.duration, 'days');
+      let tripEndDate = moment(tripDepartureDate, "YYYY/MM/DD").add(
+        trip.duration,
+        "days"
+      );
       if (moment(today).isBetween(tripDepartureDate, tripEndDate)) {
         total += 1;
       }
@@ -54,7 +58,9 @@ class TravelerRepo {
   }
 
   findUserByName(name) {
-    let foundTraveler = this.travelers.find(traveler => traveler.name === name);
+    let foundTraveler = this.travelers.find(
+      (traveler) => traveler.name === name
+    );
     if (foundTraveler) {
       return foundTraveler;
     } else {

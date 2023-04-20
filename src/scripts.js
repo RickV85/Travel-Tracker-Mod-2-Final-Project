@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable max-len */
 // Imports
 import "./css/styles.css";
 import apicalls from "./apicalls";
@@ -60,7 +62,8 @@ let agencyDashErrorMessage = document.getElementById("agencyDashErrorMessage");
 let searchTravelerInput = document.getElementById("searchTravelerInput");
 let agentSearchSection = document.getElementById("agentSearchSection");
 let findTravelerSection = document.getElementById("findTravelerSection");
-let tripDestImage = document.getElementById('tripDestImage');
+let tripDestImage = document.getElementById("tripDestImage");
+let agentDashboard = document.getElementById("agentDashboard");
 
 // Event listeners
 window.addEventListener("load", () => {
@@ -89,13 +92,13 @@ quoteTripButton.addEventListener("click", (event) => {
 
 modalGoBack.addEventListener("click", (event) => {
   event.preventDefault();
-  tripConfirmModal.classList.remove('add-flex');
+  tripConfirmModal.classList.remove("add-flex");
   tripConfirmModal.close();
 });
 
 tripConfirmModal.addEventListener("click", (event) => {
   if (event.target === tripConfirmModal) {
-    tripConfirmModal.classList.remove('add-flex');
+    tripConfirmModal.classList.remove("add-flex");
     tripConfirmModal.close();
   }
 });
@@ -199,10 +202,10 @@ function showErrorModal(errorType, error) {
 
 function openErrorModalReset() {
   loginErrorModal.showModal();
-  loginErrorModal.classList.add('login-modal');
+  loginErrorModal.classList.add("login-modal");
   setTimeout(() => {
     loginErrorModal.close();
-    loginErrorModal.classList.remove('login-modal');
+    loginErrorModal.classList.remove("login-modal");
     loginUserNameInput.value = "";
     loginPassword.value = "";
     loginErrorMessage.innerHTML = `Your username and password did not match.<br>Please check your credentials and try again.`;
@@ -295,14 +298,16 @@ function displayTrips(tripsToDisplay) {
       trip.travelers
     } guests<br>Total trip cost: $${trip.estimatedCost}
       </p>
-      <img class="trip-tile-image" src="${trip.destinationDetails.image} alt="${trip.destinationDetails.alt}"
+      <img class="trip-tile-image" src="${trip.destinationDetails.image} alt="${
+      trip.destinationDetails.alt
+    }"
     </article>`;
   });
 }
 
 function openModalEstimateTrip() {
   const empty = (input) => input === "";
-  const bad = (input) => +(input) <= 0;
+  const bad = (input) => +input <= 0;
   const values = [];
   inputs.forEach((input) => values.push(input.value));
   if (values.some(empty) || values.some(bad)) {
@@ -327,10 +332,10 @@ function openModalEstimateTrip() {
     with ${newTripQuote.travelers} guests
     Total trip cost: $${newTripQuote.estimatedCost}`;
     modalTripQuote.innerText = tripQuoteCopy;
-    tripDestImage.setAttribute('src', newTripQuote.destinationDetails.image);
-    tripDestImage.setAttribute('alt', newTripQuote.destinationDetails.alt)
+    tripDestImage.setAttribute("src", newTripQuote.destinationDetails.image);
+    tripDestImage.setAttribute("alt", newTripQuote.destinationDetails.alt);
     tripConfirmModal.setAttribute("aria-label", tripQuoteCopy);
-    tripConfirmModal.classList.add('add-flex');
+    tripConfirmModal.classList.add("add-flex");
     tripConfirmModal.showModal();
   }
 }
@@ -450,7 +455,7 @@ function submitTripRequest() {
           showThankYouMessage();
           setTimeout(() => {
             closeModalClearInputs();
-            tripConfirmModal.classList.remove('add-flex');
+            tripConfirmModal.classList.remove("add-flex");
           }, 3000);
         });
       }
@@ -510,7 +515,7 @@ function travelerSearch() {
   let travelerUpcomingTrips = displayTripsAgentSearch(
     foundTraveler.upcomingTrips
   );
-  
+
   agentSearchSection.innerHTML = `
   <h2 id="findTravelerTitle">${travelerName} - YTD Spend: $${amountSpent}</h2>
   <h3>Past Trips</h3>
